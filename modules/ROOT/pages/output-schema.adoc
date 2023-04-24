@@ -1,0 +1,129 @@
+// suppress inspection "JsonStandardCompliance" for whole file
+// ^ Avoid errors on "// <1>" annotations in json source blocks
+
+[[change-data-capture-output]]
+= Change event schema
+
+== Node Changes
+Change events for nodes follow this schema:
+
+[source, json]
+----
+{
+  "id": "A7fjWXMK_0L6hztd4xhoy0oAAAAAAAAADAAAAAAAAAAA", // <1>
+  "txId": 12, // <2>
+  "seq": 0, // <3>
+  "metadata": {
+    "executingUser": "neo4j", // <4>
+    "authenticatedUser": "neo4j", // <5>
+    "captureMode": "FULL", // <6>
+    "connectionClient": "127.0.0.1:51320", // <7>
+    "serverId": "e605bd8f", // <8>
+    "connectionType": "bolt", // <9>
+    "connectionServer": "127.0.0.1:51316", // <10>
+    "txStartTime": "2023-03-03T11:58:30.429Z", // <11>
+    "txCommitTime": "2023-03-03T11:58:30.526Z" // <12>
+  },
+  "event": {
+    "elementId": "4:b7e35973-0aff-42fa-873b-5de31868cb4a:1", // <13>
+    "keys": { // <14>
+        "userId": "1001",
+        "name": "John",
+        "lastName": "Doe"
+    },
+    "eventType": "n", // <15>
+    "state": {
+      "before": null, // <16>
+      "after": {
+        "properties": { // <17>
+          "tagline": "Houston, we have a problem.",
+          "title": "Apollo 13",
+          "released": "1995"
+        },
+        "labels": ["MOVIE"] // <18>
+      }
+    },
+    "operation": "c", // <19>
+    "labels": ["MOVIE"] // <20>
+  }
+}
+----
+<1> A unique id. It can be used to continue streaming changes. See xref:procedures.adoc[]
+<2> A number identifying which transaction the change happened in, unique in combination with `seq`. Transaction IDs are not continuous. Some transactions, such as system commands, are not recorded in change data capture and will cause gaps in the transaction ids.
+<3> A number used for ordering changes that happened in the same transaction.
+<4> Which user executed the query that caused this change. May be different from authenticatedUser when using impersonation. <TODO link to impersonation docs>
+<5> The authenticated user when the query was executed.
+<6> What transaction log enrichment mode was set to when this change was committed.
+<7> IP address and port of where the client connected from.
+<8> The server identifier which executed this transaction. <TODO link to SHOW SERVERS docs>
+<9> How the client connected to the server.
+<10> IP address and port of the server to which the client was connected.
+<11> When the transaction containing this change started.
+<12> When the transaction containing this change was committed.
+<13> ElementId of the changed entity (node or relationship).
+<14> Keys identifying the changed entity. Requires constraints, see xref:constraints.adoc[] for details.
+<15> `n` or `r` indicating if the event changes a node or relationship.
+<16> A map describing the state of the entity before the change. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:configure-neo4j.adoc#enrichment-mode[enrichment mode] for details.
+<17> Properties of the entity after the change has been applied. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:configure-neo4j.adoc#enrichment-mode[enrichment mode] for details.
+<18> Labels of the entity after the change has been applied. May be limited to the labels of the entity that have changed when using `DIFF` enrichment mode. See xref:configure-neo4j.adoc#enrichment-mode[enrichment mode] for details.
+<19> Type of change, `c` for creating an entity, `u` for updating an entity, `d` for deleting an entity.
+<20> Labels of the changed node. // TODO describe before & after behaviour.
+
+
+== Relationship changes
+Change events for relationships follow a similar schema to node changes. The differences are annotated below.
+
+[source, json]
+----
+{
+  "id": "A2pK9P_aOknnrnEsCsPB_BoAAAAAAAAADwAAAAAAAAAA",
+  "txId": 15,
+  "seq": 0,
+  "metadata": {
+    "executingUser": "neo4j",
+    "authenticatedUser": "neo4j",
+    "captureMode": "FULL",
+    "connectionClient": "127.0.0.1:51190",
+    "serverId": "2230d17a",
+    "connectionType": "bolt",
+    "connectionServer": "127.0.0.1:51186",
+    "txStartTime": "2023-03-03T11:54:40.510Z",
+    "txCommitTime": "2023-03-03T11:54:40.773Z"
+  },
+  "event": {
+    "elementId": "5:6a4af4ff-da3a-49e7-ae71-2c0ac3c1fc1a:0",
+    "start": { // <1>
+      "elementId": "4:6a4af4ff-da3a-49e7-ae71-2c0ac3c1fc1a:0", // <2>
+      "keys": {}, // <3>
+      "labels": ["PERSON"] // <4>
+    },
+    "end": { // <5>
+      "elementId": "4:6a4af4ff-da3a-49e7-ae71-2c0ac3c1fc1a:1",
+      "keys": {},
+      "labels": [
+        "MOVIE"
+      ]
+    },
+    "eventType": "r",
+    "state": {
+      "before": null,
+      "after": {
+        "properties": {
+          "roles": "Jack Swigert"
+        }
+        // <6>
+      }
+    },
+    "type": "ACTED_IN", // <7>
+    "operation": "c",
+    "key": {}
+  }
+}
+----
+<1> A map containing information about the start node for the changed relationship.
+<2> ElementId of the start node for the changed relationship.
+<3> Keys specified on the start node for the changed relationship.
+<4> Labels on the start node for the changed relationship.
+<5> Same schema as start. A map containing information about the end node for the changed relationship.
+<6> Relationships do not have labels, and thus there is no field for labels in the after state.
+<7> Relationships have type rather than label.

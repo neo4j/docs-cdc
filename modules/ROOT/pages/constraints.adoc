@@ -1,0 +1,17 @@
+[[change-data-capture-constraints]]
+= Constraints and the key field
+
+Constraints are required for populating the `event.key` field on node changes and `event.start/end.keys` fields on relationship changes. With the following constraint, properties `name` and `lastname` will be present in the fields for all changes involving `PERSON` nodes:
+[source, cypher]
+----
+CREATE CONSTRAINT IF NOT EXISTS FOR (n:PERSON) REQUIRE (n.name, n.lastname) IS NODE KEY
+----
+Alternatively, the key constraint can be split up into existence and uniqueness constraints.
+[source, cypher]
+----
+CREATE CONSTRAINT IF NOT EXISTS FOR (n:PERSON) REQUIRE n.name IS NOT NULL
+CREATE CONSTRAINT IF NOT EXISTS FOR (n:PERSON) REQUIRE n.lastname IS NOT NULL
+CREATE CONSTRAINT IF NOT EXISTS FOR (n:PERSON) REQUIRE (n.name, n.lastname) IS UNIQUE
+----
+
+For more details on the constraint commands see <TODO link to constraint docs>

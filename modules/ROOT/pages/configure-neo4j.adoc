@@ -1,0 +1,41 @@
+[[cdc-configure-neo4j]]
+= Configure Neo4j for Change Data Capture
+In order to enable the change data capture feature, the setting `internal.dbms.change_data_capture` must be set to `true` in neo4j.conf.
+
+Log enrichment needs to be enabled for individual databases.
+
+Use the options clause to enable log enrichment when creating the database:
+[source, cypher]
+----
+CREATE DATABASE name OPTIONS {txLogEnrichment:"FULL"}
+----
+
+Log enrichment can also be enabled on an existing database using:
+[source, cypher]
+----
+ALTER DATABASE name SET OPTION txLogEnrichment "FULL"
+----
+
+Log enrichment can be disabled through:
+[source, cypher]
+----
+ALTER DATABASE name SET OPTION txLogEnrichment "OFF"
+----
+
+Valid values for the `txLogEnrichment` option are `OFF`, `DIFF`, `FULL`. For more information on the log enrichment modes see <<enrichment-mode>>.
+
+[[enrichment-mode]]
+== Enrichment mode
+Neo4j offers three levels of transaction log enrichment `OFF`, `DIFF` and `FULL`.
+For change data capture procedures to work, the level of enrichment must be either `DIFF` or `FULL`.
+The enrichment level is set on each database.
+
+With enrichment mode set to `OFF`, no additional data is written to the transaction log and change data capture procedures will fail.
+
+With enrichment mode set to `DIFF`, changes are recorded as the difference between before and after state.
+
+With enrichment mode set to `FULL`, changes are recorded as a complete copy of the previous state and the new state.
+
+Enrichment mode is reflected in the output from change data capture procedures.
+On databases with `FULL` enrichment mode, The `event.state.before` and `event.state.after` fields contain the complete before and after state.
+With `DIFF` mode they only contain removals, updates and additions.
