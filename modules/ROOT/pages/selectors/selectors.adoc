@@ -1,0 +1,37 @@
+[[cdc-selectors]]
+= Selectors
+
+Change data capture procedures support filtering their output using selectors.
+
+As an example, the following cypher will only return changes where the property "name" has changed on nodes.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"n", changesTo:["name"]}])
+----
+[NOTE]
+The examples in this section assume that the parameter '$previousChangeId' has been populated with a change id. Either from the result of a previous xref:procedures/query.adoc[query] or using the xref:procedures/current.adoc[current] or xref:procedures/earliest.adoc[earliest] procedures.
+// TODO link to parameters docs?
+
+[[combining-selectors]]
+== Combining selectors
+The more specific a selector is, the fewer changes will be returned.
+Specifying both "name" and "surname" for example, will only return changes where both `name` *and* `surname` properties have changed within the same transaction.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"n", changesTo:["name", "surname"]}])
+----
+
+In order to extract changes for either `name` *or* `surname` properties, two separate selectors have to be specified:
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [
+    {select:"n", changesTo:["name"]},
+    {select:"n", changesTo:["surname"]}
+])
+----
+
+
+

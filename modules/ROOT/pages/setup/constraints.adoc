@@ -14,4 +14,9 @@ CREATE CONSTRAINT IF NOT EXISTS FOR (n:PERSON) REQUIRE n.lastname IS NOT NULL
 CREATE CONSTRAINT IF NOT EXISTS FOR (n:PERSON) REQUIRE (n.name, n.lastname) IS UNIQUE
 ----
 
+[NOTE]
+====
+If the constraints are added after a node has been created, the change events will not be updated retroactively.
+====
+
 For more details on the constraint commands see <TODO link to constraint docs>

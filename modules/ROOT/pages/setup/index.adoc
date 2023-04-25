@@ -1,0 +1,10 @@
+[role=enterprise-edition]
+[[setup]]
+= Setup
+:description: This chapter describes how to set up neo4j for change data capture.
+
+This chapter describes the following:
+
+* xref:setup/feature-flag.adoc[] (required during EAP)
+* xref:setup/enrichment-mode.adoc[] (required)
+* xref:setup/constraints.adoc[] (optional)

@@ -1,0 +1,33 @@
+[[earliest]]
+= Getting the earliest change id
+
+The procedure `cdc.earliest` is used to get a change ID for the earliest available change.
+====
+[source, cypher]
+----
+CALL cdc.earliest
+----
+[queryresult]
+----
++------------------------------------------------+
+| id                                             |
++------------------------------------------------+
+| "AwAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA" |
++------------------------------------------------+
+
+1 row
+ready to start consuming query after 28 ms, results consumed after another 2 ms
+----
+====
+
+Unlike other change IDs, this ID does not uniquely identify an actual change.
+Instead, it dynamically references the point in time before the earliest available change.
+
+Changes are usually only available for as long as they exist in the transaction log.
+// TODO fix link!
+The transaction log gets regularly pruned (see https://neo4j.com/docs/operations-manual/current/configuration/transaction-logs/ for details on this).
+
+Changes also stop being available if the xref:setup/enrichment-mode.adoc[enrichment mode] gets set to `OFF`.
+Even if enrichment gets enabled again the previous changes do not become available again.
+
+Combining changes off the enrichment mode with server restarts may cause instability. Using the earliest ID to query for changes may in these cases cause exceptions and or inconsistent results. In these situations it is recommended to use xref:procedures/current.adoc[cdc.current] instead.

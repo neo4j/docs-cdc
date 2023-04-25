@@ -1,9 +1,21 @@
 * xref:index.adoc[]
-* xref:configure-neo4j.adoc[]
-* xref:procedures.adoc[]
-* xref:output-schema.adoc[]
-* xref:selectors.adoc[]
-* xref:constraints.adoc[]
+
+* xref:setup/index.adoc[]
+** xref:setup/feature-flag.adoc[]
+** xref:setup/enrichment-mode.adoc[]
+** xref:setup/constraints.adoc[]
+
+* xref:procedures/index.adoc[]
+** xref:procedures/query.adoc[]
+// TODO maybe have a "previous" here, indicating how to fetch the ID from the previous
+** xref:procedures/earliest.adoc[]
+** xref:procedures/current.adoc[]
+** xref:procedures/output-schema.adoc[]
+
+
+* xref:selectors/selectors.adoc[]
+** xref:selectors/schema.adoc[]
+** xref:selectors/examples.adoc[]
 
 
 

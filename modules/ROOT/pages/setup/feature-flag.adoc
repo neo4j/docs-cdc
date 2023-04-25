@@ -1,0 +1,11 @@
+[[feature-flag]]
+= Feature flag
+:description: How to enable the feature flag for change data capture.
+
+During the EAP for CDC a special feature flag needs to be enabled in order to access the new features.
+
+Set the following in __neo4j.conf__
+[source, properties]
+----
+internal.dbms.change_data_capture=true
+----

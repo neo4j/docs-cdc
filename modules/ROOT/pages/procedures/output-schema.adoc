@@ -48,7 +48,7 @@ Change events for nodes follow this schema:
   }
 }
 ----
-<1> A unique id. It can be used to continue streaming changes. See xref:procedures.adoc[]
+<1> A unique id. It can be used to continue streaming subsequent changes. See xref:procedures/query.adoc[]
 <2> A number identifying which transaction the change happened in, unique in combination with `seq`. Transaction IDs are not continuous. Some transactions, such as system commands, are not recorded in change data capture and will cause gaps in the transaction ids.
 <3> A number used for ordering changes that happened in the same transaction.
 <4> Which user executed the query that caused this change. May be different from authenticatedUser when using impersonation. <TODO link to impersonation docs>
@@ -61,11 +61,11 @@ Change events for nodes follow this schema:
 <11> When the transaction containing this change started.
 <12> When the transaction containing this change was committed.
 <13> ElementId of the changed entity (node or relationship).
-<14> Keys identifying the changed entity. Requires constraints, see xref:constraints.adoc[] for details.
-<15> `n` or `r` indicating if the event changes a node or relationship.
-<16> A map describing the state of the entity before the change. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:configure-neo4j.adoc#enrichment-mode[enrichment mode] for details.
-<17> Properties of the entity after the change has been applied. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:configure-neo4j.adoc#enrichment-mode[enrichment mode] for details.
-<18> Labels of the entity after the change has been applied. May be limited to the labels of the entity that have changed when using `DIFF` enrichment mode. See xref:configure-neo4j.adoc#enrichment-mode[enrichment mode] for details.
+<14> Keys identifying the changed entity. Requires constraints, see xref:setup/constraints.adoc[] for details.
+<15> "n" or "r" indicating if the event changes a node or relationship.
+<16> A map describing the state of the entity before the change. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:setup/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+<17> Properties of the entity after the change has been applied. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:setup/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+<18> Labels of the entity after the change has been applied. May be limited to the labels of the entity that have changed when using `DIFF` enrichment mode. See xref:setup/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
 <19> Type of change, `c` for creating an entity, `u` for updating an entity, `d` for deleting an entity.
 <20> Labels of the changed node. // TODO describe before & after behaviour.
 

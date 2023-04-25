@@ -1,0 +1,47 @@
+[[enrichment-mode]]
+= Enrichment mode
+
+Neo4j offers three levels of transaction log enrichment `OFF`, `DIFF` and `FULL`.
+For change data capture procedures to work, the level of enrichment must be either `DIFF` or `FULL`.
+The enrichment level is set on each database and defaults to `OFF`.
+
+With enrichment mode set to `OFF`, no additional data is written to the transaction log and change data capture procedures will fail.
+
+With enrichment mode set to `DIFF`, changes are recorded as the difference between before and after state.
+
+With enrichment mode set to `FULL`, changes are recorded as a complete copy of the previous state and the new state.
+
+Enrichment mode is reflected in the output from change data capture procedures.
+On databases with `FULL` enrichment mode, The `event.state.before` and `event.state.after` fields contain the complete before and after state.
+With `DIFF` mode they only contain removals, updates and additions.
+For more details on the output schema see xref:procedures/output-schema.adoc[]
+
+
+== Modifying enrichment mode
+
+Use the options clause to enable log enrichment when creating the database:
+[source, cypher]
+----
+CREATE DATABASE name OPTIONS {txLogEnrichment:"FULL"}
+----
+
+Log enrichment can also be enabled on an existing database using:
+[source, cypher]
+----
+ALTER DATABASE name SET OPTION txLogEnrichment "DIFF"
+----
+
+Log enrichment can be disabled through:
+[source, cypher]
+----
+ALTER DATABASE name SET OPTION txLogEnrichment "OFF"
+----
+
+[WARNING]
+====
+Turning enrichment mode 'OFF' immediately breaks the continuity of change events. Regular change IDs generated before this point can no longer be used. Even when re-enabling enrichment these IDs will remain invalid.
+
+After re-enabling enrichment using outdated IDs will lead to exceptions or inconsistent results. The xref:procedures/current.adoc[cdc.current] or xref:procedures/earliest.adoc[cdc.earliest] procedures should be used to generate a new starting point.
+
+Note that the ID returned by xref:procedures/earliest.adoc[cdc.earliest] has special behaviour. An earliest id generated before turning off enrichment will still be valid after re-enabling enrichment, however it might no longer point at the same change event.
+====

@@ -1,0 +1,86 @@
+= Examples
+
+== Selecting entities based on operation type
+Changes can be filtered to only return creates, updates or deletes, regardless of whether the effected entity is a node or a relationship:
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"e", operation:"c"}])
+----
+
+== Selecting entities based on changed properties
+Changes can be filtered to only include those where a certain property is changed.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"e", changesTo:["name"]}])
+----
+
+== Selecting nodes/relationships by element ID
+Changes can be filtered to a specific element ID.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"n", elementId:"4:e239be76-c7e8-43d8-aa03-567de592f426:0"}])
+CALL cdc.query($previousChangeId, [{select:"r", elementId:"5:a439fca3-d8b3-35f0-aa49-987fa112f993:0"}])
+----
+
+
+== Selecting nodes by key
+
+Node changes can be filtered to specific keys. The provided key needs to fully match to a corresponding node key or property existence and uniqueness constraints on the node. See xref:setup/constraints.adoc[] for details.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"n", key:{name:"Kevin", surname:"Bacon"}}])
+----
+
+[NOTE]
+====
+If the constraints are added after a node has been created, the change events will not be updated retroactively.
+====
+
+== Selecting nodes by label
+Node changes can be filtered to specific labels.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"n", labels:["ACTOR", "DIRECTOR"]}])
+----
+
+[NOTE]
+====
+The query above will only return changes on nodes that have *both* labels.
+In order to get changes on nodes with either label, two separate selectors have to be specified.
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"n", labels:["ACTOR"]}, {select:"n", labels:["DIRECTOR"]}])
+----
+See xref:selectors/selectors.adoc#combining-selectors[combining selectors] for details.
+====
+
+== Selecting relationships by type
+Relationship changes can be filtered to a specific type.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{select:"r", type:"ACTED_IN"}])
+----
+
+== Selecting relationships by start/end nodes
+Relationship changes can be selected based on their start and end nodes.
+
+[source, cypher]
+----
+CALL cdc.query($previousChangeId, [{
+    select:"r",
+    start:{labels:["ACTOR"]},
+    end:{key:{title:"Apollo 13"}}
+}])
+----
+[NOTE]
+====
+The start and end node maps mostly support the same values as regular node selectors. Except `operation` and `changesTo`. A node change would not cause a relationship change event.
+====
+
+// TODO changesTo example for nodes and relationships

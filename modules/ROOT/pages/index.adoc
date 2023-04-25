@@ -17,19 +17,18 @@ TODO examples are similar to the movie graph, but not actually following the mov
 
 ====
 *TODO put these topics/stuff somewhere:*
-- what is seq
-* change order within tx (create node, create rel, update node update rel etc???)
-//         final var expected = List.of(
-//                new EventInfo(Type.NODE, Operation.CREATE, idMapper.nodeElementId(nodeToAdd), false),
-//                new EventInfo(Type.RELATIONSHIP, Operation.CREATE, idMapper.relationshipElementId(relToAdd), false),
-//                new EventInfo(Type.NODE, Operation.UPDATE, nodeLabelModify, false),
-//                new EventInfo(Type.NODE, Operation.UPDATE, nodePropModify, false),
-//                new EventInfo(Type.RELATIONSHIP, Operation.UPDATE, relPropModify, false),
-//                new EventInfo(Type.NODE, Operation.DELETE, nodeToDelete, false),
-//                new EventInfo(Type.RELATIONSHIP, Operation.DELETE, relToDelete, true));
+
 - For create events `event.state.before` is null
 - For delete events `event.state.after` is null
 - For update events neither is null, they might be empty maps for diff mode
+
+*Current docs todos*
+
+
+
+- example cdc application
+- add return values to applicable cypher statements, such as: https://neo4j.com/docs/operations-manual/current/manage-databases/queries/#manage-databases-queries-show-database
+
 
 
 *Scenarios?*

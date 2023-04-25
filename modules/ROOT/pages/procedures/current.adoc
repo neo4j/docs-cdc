@@ -1,0 +1,21 @@
+= Getting the current change id
+
+The procedure `cdc.current` returns the `id` from the latest entry in the transaction log.
+This value may be used to query changes from "now".
+====
+[source, cypher]
+----
+CALL cdc.current
+----
+[queryresult]
+----
++------------------------------------------------+
+| id                                             |
++------------------------------------------------+
+| "A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAAA3__________" |
++------------------------------------------------+
+
+1 row
+ready to start consuming query after 54 ms, results consumed after another 3 ms
+----
+====

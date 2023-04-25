@@ -1,0 +1,35 @@
+[[change-data-capture-querying-changes]]
+= Querying changes
+
+The procedure `cdc.query(from, selectors)` is used to query the database for changes.
+Once all changes have been streamed the query will terminate.
+Each xref:procedures/output-schema.adoc[record] contains an `id` field, which can be used as `from` in a subsequent query, in order to continue streaming from that point.
+The `from` field is exclusive and will not include the already seen record a second time.
+
+To get a `from` value for the first iteration see xref:procedures/current.adoc[] and xref:procedures/earliest.adoc[].
+====
+[source, cypher]
+----
+CALL cdc.query("A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABAAAAAAAAAAA")
+----
+[queryresult]
+----
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| id                                             | txId | seq | metadata                                                                                                                                                                                                                                                                        | event                                                                                                                                                                     |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| "A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABQAAAAAAAAAA" | 4    | 0   | {executingUser: "neo4j", connectionClient: "127.0.0.1:63783", authenticatedUser: "neo4j", captureMode: "DIFF", serverId: "4c453340", connectionType: "bolt", connectionServer: "127.0.0.1:7687", txStartTime: 2023-04-25T07:50:10.250Z, txCommitTime: 2023-04-25T07:50:10.305Z} | {elementId: "4:7575e996-8b95-49a7-8a91-cb1645ab940d:0", keys: {}, eventType: "n", state: {before: NULL, after: {properties: {}, labels: []}}, operation: "c", labels: []} |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+1 row
+ready to start consuming query after 9 ms, results consumed after another 39 ms
+----
+The returned schema is described in the chapter xref:procedures/output-schema.adoc[].
+====
+
+
+Selectors can be used to filter the output, see xref:selectors/selectors.adoc[selectors] for details.
+[source, cypher]
+----
+CALL cdc.query("A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABAAAAAAAAAAA", {select:"r"})
+----
+
