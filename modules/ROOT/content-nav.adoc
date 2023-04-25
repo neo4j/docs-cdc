@@ -17,6 +17,9 @@
 ** xref:selectors/schema.adoc[]
 ** xref:selectors/examples.adoc[]
 
+* xref:examples/index.adoc[]
+** xref:examples/java.adoc[]
+
 
 
 //* xref:getting-started.adoc[]

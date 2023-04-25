@@ -1,0 +1,78 @@
+= Example CDC usage in java
+
+[source, java]
+----
+public class CDCService implements Closeable {
+    private final Driver driver;
+    private String cursor;
+
+    private final ScheduledThreadPoolExecutor scheduler;
+
+    public CDCService(String uri, String user, String password) {
+        driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
+        scheduler = new ScheduledThreadPoolExecutor(1);
+    }
+
+    @Override
+    public void close() {
+        driver.close();
+        scheduler.shutdown();
+    }
+
+    public String currentChangeID() {
+        try (var session = driver.session()) {
+            return session.executeRead(tx -> {
+                var result = tx.run(new Query("CALL cdc.current"));
+                return result.single().get("id").asString();
+            });
+        }
+    }
+
+    public String earliestChangeID() {
+        try (var session = driver.session()) {
+            return session.executeRead(tx -> {
+                var result = tx.run(new Query("CALL cdc.earliest"));
+                return result.single().get("id").asString();
+            });
+        }
+    }
+
+    public List<Record> changes(String from) {
+        return changes(from, List.of());
+    }
+
+    public List<Record> changes(String from, List<Map<String, Object>> selectors) {
+        driver.verifyConnectivity();
+        try (var session = driver.session()) {
+            return session.executeRead(tx -> {
+                var result = tx.run(new Query("CALL cdc.query($from, $selectors)", Map.of("from", from, "selectors", selectors)));
+                return result.stream().toList();
+            });
+        }
+    }
+
+    public void start() {
+        cursor = currentChangeID();
+        scheduler.scheduleWithFixedDelay(this::queryChanges, 0, 500, TimeUnit.MILLISECONDS);
+    }
+
+    public synchronized void queryChanges() {
+        var changes = changes(cursor);
+        for (Record change : changes) {
+            cursor = change.get("id").asString();
+
+            System.out.println(change);
+        }
+    }
+
+    public static void main(String... args) {
+
+        var cdcService = new CDCService("bolt://localhost:7687", "neo4j", "passw0rd");
+        cdcService.start();
+
+        // Prevent thread from exiting...
+        while(true) {}
+//        cdcService.close();
+    }
+}
+----
