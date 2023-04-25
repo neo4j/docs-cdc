@@ -5,8 +5,9 @@
 public class CDCService implements Closeable {
     private final Driver driver;
     private String cursor;
-
     private final ScheduledThreadPoolExecutor scheduler;
+
+    private List<Map<String, Object>> selectors = List.of();
 
     public CDCService(String uri, String user, String password) {
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
@@ -19,7 +20,11 @@ public class CDCService implements Closeable {
         scheduler.shutdown();
     }
 
-    public String currentChangeID() {
+    private void setSelectors(List<Map<String, Object>> selectors) {
+        this.selectors = selectors;
+    }
+
+    private String currentChangeID() {
         try (var session = driver.session()) {
             return session.executeRead(tx -> {
                 var result = tx.run(new Query("CALL cdc.current"));
@@ -28,7 +33,7 @@ public class CDCService implements Closeable {
         }
     }
 
-    public String earliestChangeID() {
+    private String earliestChangeID() {
         try (var session = driver.session()) {
             return session.executeRead(tx -> {
                 var result = tx.run(new Query("CALL cdc.earliest"));
@@ -37,18 +42,17 @@ public class CDCService implements Closeable {
         }
     }
 
-    public List<Record> changes(String from) {
-        return changes(from, List.of());
-    }
-
-    public List<Record> changes(String from, List<Map<String, Object>> selectors) {
+    private List<Record> changes(String from, List<Map<String, Object>> selectors) {
         driver.verifyConnectivity();
         try (var session = driver.session()) {
             return session.executeRead(tx -> {
                 var result = tx.run(new Query("CALL cdc.query($from, $selectors)", Map.of("from", from, "selectors", selectors)));
                 return result.stream().toList();
             });
+        } catch (Exception e) {
+            System.err.println(e);
         }
+        return List.of();
     }
 
     public void start() {
@@ -56,18 +60,29 @@ public class CDCService implements Closeable {
         scheduler.scheduleWithFixedDelay(this::queryChanges, 0, 500, TimeUnit.MILLISECONDS);
     }
 
-    public synchronized void queryChanges() {
-        var changes = changes(cursor);
+    private synchronized void queryChanges() {
+        var changes = changes(cursor, selectors);
         for (Record change : changes) {
             cursor = change.get("id").asString();
-
-            System.out.println(change);
+            applyChange(change);
         }
+    }
+
+    private void applyChange(Record change) {
+        var eventType = change.get("event").asMap().get("eventType");
+        var operation = change.get("event").asMap().get("operation");
+        System.out.println("Element of type '%s' changed with operation '%s'".formatted(eventType, operation));
+        System.out.println(change);
     }
 
     public static void main(String... args) {
 
         var cdcService = new CDCService("bolt://localhost:7687", "neo4j", "passw0rd");
+        List<Map<String, Object>> selectors = List.of(
+                Map.of("select", "n") // Only select nodes
+//                Map.of("select", "n", "changesTo", List.of("username")) // Only select nodes where the username was updated
+        );
+        cdcService.setSelectors(selectors);
         cdcService.start();
 
         // Prevent thread from exiting...
