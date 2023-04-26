@@ -8,9 +8,15 @@
 [[change-data-capture]]
 = Introduction
 
-====
-TODO general introduction, what is CDC?
-====
+Change data capture (CDC) allows you to capture and track changes to your database in real-time, enabling you to keep your other data sources up-to-date and accurate.
+With CDC, you can identify and respond to changes (create, update, and delete) on your graph entities (nodes and relationships) as they happen, and integrate these changes into other systems and applications.
+
+Our CDC feature is easy to set up and use, allowing you to quickly and efficiently capture and replicate changes to your data without disrupting your workflow.
+With its flexible configuration options, you can choose to capture changes on a per-database basis, and query changes with advanced filtering support to fit your needs.
+
+In this documentation, we will guide you through the process of setting up CDC, configuring it to capture the changes, and querying those changes to further processing, such as replicating to another system.
+We will also provide you with best practices and troubleshooting tips to ensure that your CDC implementation runs smoothly.
+
 ====
 TODO examples are similar to the movie graph, but not actually following the movie graph. See if northwind is complicated enough or if we should go with our own.
 ====

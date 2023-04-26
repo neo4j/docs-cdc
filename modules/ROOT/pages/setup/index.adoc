@@ -5,6 +5,7 @@
 
 This chapter describes the following:
 
+* xref:setup/key-considerations.adoc[] (required)
 * xref:setup/feature-flag.adoc[] (required during EAP)
 * xref:setup/enrichment-mode.adoc[] (required)
 * xref:setup/constraints.adoc[] (optional)

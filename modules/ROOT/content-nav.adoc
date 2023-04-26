@@ -1,6 +1,7 @@
 * xref:index.adoc[]
 
 * xref:setup/index.adoc[]
+** xref:setup/key-considerations.adoc[]
 ** xref:setup/feature-flag.adoc[]
 ** xref:setup/enrichment-mode.adoc[]
 ** xref:setup/constraints.adoc[]

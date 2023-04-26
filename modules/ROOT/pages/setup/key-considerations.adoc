@@ -1,0 +1,22 @@
+[[key-considerations]]
+= Key considerations
+:description: Key considerations that needs to be handled
+
+== Disk size
+
+Enabling change data capture on a database causes more data to be written into transaction log files.
+This means that your log files will be rotated more frequently and log pruning will kick in sooner (based on your configuration).
+You might run into out of disk space issues if your disk size for transaction log storage is limited.
+Please ensure that you have plenty of available space.
+// TODO: how much, can we give a ballpoint figure?
+
+
+== Transaction log retention
+
+Since Neo4j stores change data capture information inside transaction log entries, it is important that you configure your transaction log retention period based on your requirements.
+We suggest CDC users to configure the `db.tx_log.rotation.retention_policy` setting using temporal types, such as `hours` or `days`.
+
+
+The number of hours or days to keep transaction logs is highly dependent on your CDC use case, but as a general rule of thumb you can pick the period based on your tolerance of failures in your CDC application so that the changes you have not yet processed are not pruned.
+
+For more details on transaction log retention and how to configure it, see link:{neo4j-docs-base-uri}/operations-manual/{page-version}/configuration/transaction-logs/#transaction-logging-log-retention[Operations Manual -> Configuration -> Transaction Log].

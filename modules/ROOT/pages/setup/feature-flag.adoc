@@ -1,10 +1,10 @@
 [[feature-flag]]
-= Feature flag
-:description: How to enable the feature flag for change data capture.
+= Enable feature
+:description: How to enable the CDC feature.
 
-During the EAP for CDC a special feature flag needs to be enabled in order to access the new features.
+During the CDC Early Access Program (EAP), CDC feature needs to be explicitly enabled through a dedicated flag in `neo4j.conf`.
 
-Set the following in __neo4j.conf__
+Add the following line in your `neo4j.conf` file.
 [source, properties]
 ----
 internal.dbms.change_data_capture=true
