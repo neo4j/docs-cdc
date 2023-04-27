@@ -38,7 +38,7 @@ All fields except for `select` are optional.
 
 <1> Select changes on nodes. Other valid values are `"e"` for all entity types and `"r"` for relationship changes.
 <2> Select changes on the node with this elementId.
-<3> Select changes on nodes with matching key properties. Key matching is only possible when there is a defined node key or property existence and uniqueness constraints defined on one of the labels set on the affected node, see xref:setup/constraints.adoc[] for details.
+<3> Select changes on nodes with matching key properties. Key matching is only possible when there is a defined node key or property existence and uniqueness constraints defined on one of the labels set on the affected node, see xref:getting-started/constraints.adoc[] for details.
 <4> Select changes on nodes which have all specified labels.
 <5> Select changes which are creating nodes. Other valid values are `"u"` for node updates and `"d"` for node deletions.
 <6> Select changes which affect all specified properties.
@@ -79,7 +79,7 @@ All fields except for `select` are optional.
 <4> Select changes on relationships with a start node matching this node selector. Note that `operation` and `changesTo` are not valid inside these node selectors.
 <5> Optionally specify that this is a node selector, specifying `"r"` or `"e"` here will cause an error.
 <6> Select relationships where the start node has this elementId.
-<7> Select relationships where the start node has these key properties. Key matching is only possible when there is a defined relationship key or property existence and uniqueness constraints defined on the relationship type, see xref:setup/constraints.adoc[] for details.
+<7> Select relationships where the start node has these key properties. Key matching is only possible when there is a defined relationship key or property existence and uniqueness constraints defined on the relationship type, see xref:getting-started/constraints.adoc[] for details.
 <8> Select relationships where the start node has these labels.
 <9> Same schema as `start`.
 <10> Select changes which are creating relationships. Other valid values are `"u"` for updates and `"d"` for deletes.

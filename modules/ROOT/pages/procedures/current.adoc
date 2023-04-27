@@ -1,21 +1,33 @@
+[[current]]
 = Getting the current change id
 
-The procedure `cdc.current` returns the `id` from the latest entry in the transaction log.
-This value may be used to query changes from "now".
+The procedure `cdc.current` is used to get a change identifier for the last committed transaction.
+Note that the returned identifier is exclusive, and will not include the changes happened in the transaction that it points to.
+
+.Signature
+[source]
+----
+cdc.current() :: (
+    id :: STRING? // <1>
+)
+----
+
+<1> A change identifier that refers to the last committed transaction.
+
 ====
+.Query current change identifier
 [source, cypher]
 ----
-CALL cdc.current
+CALL cdc.current()
 ----
-[queryresult]
-----
-+------------------------------------------------+
-| id                                             |
-+------------------------------------------------+
-| "A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAAA3__________" |
-+------------------------------------------------+
 
-1 row
-ready to start consuming query after 54 ms, results consumed after another 3 ms
-----
+.Result
+[role="queryresult",options="header,footer",cols="1*<m"]
+|===
+| +id+
+| +"A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABQAAAAAAAAAA"+
+
+1+d|Rows: 1
+|===
+
 ====

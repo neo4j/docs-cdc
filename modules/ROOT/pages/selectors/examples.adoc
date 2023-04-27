@@ -28,7 +28,7 @@ CALL cdc.query($previousChangeId, [{select:"r", elementId:"5:a439fca3-d8b3-35f0-
 
 == Selecting nodes by key
 
-Node changes can be filtered to specific keys. The provided key needs to fully match to a corresponding node key or property existence and uniqueness constraints on the node. See xref:setup/constraints.adoc[] for details.
+Node changes can be filtered to specific keys. The provided key needs to fully match to a corresponding node key or property existence and uniqueness constraints on the node. See xref:getting-started/constraints.adoc[] for details.
 
 [source, cypher]
 ----

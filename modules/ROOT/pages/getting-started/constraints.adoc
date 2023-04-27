@@ -92,6 +92,8 @@ If, on the other hand, the changed node has both `Person` and `Employee` labels 
 }
 ----
 
+For a full description of change record schema, see xref:procedures/output-schema.adoc[].
+
 [NOTE]
 ====
 Although the preferred way of specifying node key properties is creating `node key` constraint, the same can be achieved using both `unique node property` and `node property existence` constraints on the same set of properties.
@@ -104,6 +106,8 @@ CREATE CONSTRAINT person_unique FOR (n:Person) REQUIRE (n.firstName, n.lastName)
 ----
 ====
 
+For details about constraints and syntax of related commands, see link:{neo4j-docs-base-uri}/cypher-manual/{page-version}/constraints[Cypher Manual -> Constraints].
+
 == Relationship keys
 
 Assume that we have the following constraints for `MARRIED_TO` relationship type.
@@ -111,7 +115,7 @@ Assume that we have the following constraints for `MARRIED_TO` relationship type
 .Relationship key for `MARRIED_TO` type
 [source, cypher]
 ----
-CREATE CONSTRAINT knows_key FOR ()-[r:MARRIED_TO]-() REQUIRE (r.registerId) IS RELATIONSHIP KEY
+CREATE CONSTRAINT married_to_key FOR ()-[r:MARRIED_TO]-() REQUIRE (r.registerId) IS RELATIONSHIP KEY
 ----
 
 Whenever a change happens on a relationship of type `MARRIED_TO` with `registerId` property set as `1125`, the change event will include the following key information.
@@ -131,7 +135,7 @@ Whenever a change happens on a relationship of type `MARRIED_TO` with `registerI
 
 If the relationship's start and end nodes correspond to nodes with node key constraint, those property values are also included in the change event.
 
-[source, json]
+[source, json, role=nocollapse]
 ----
 {
     //...
@@ -164,5 +168,17 @@ If the relationship's start and end nodes correspond to nodes with node key cons
 }
 ----
 
+For a full description of change record schema, see xref:procedures/output-schema.adoc[].
+
+[NOTE]
+====
+Although the preferred way of specifying relationship key properties is creating `relationship key` constraint, the same can be achieved using both `unique relationship property` and `relationship property existence` constraints on the same set of properties.
+
+[source, cypher]
+----
+CREATE CONSTRAINT married_to_registerId_exists FOR ()-[r:MARRIED_TO]-() REQUIRE (r.registerId) IS NOT NULL;
+CREATE CONSTRAINT married_to_registerId_unique FOR ()-[r:MARRIED_TO]-() REQUIRE (r.registerId) IS UNIQUE;
+----
+====
 
 For details about constraints and syntax of related commands, see link:{neo4j-docs-base-uri}/cypher-manual/{page-version}/constraints[Cypher Manual -> Constraints].

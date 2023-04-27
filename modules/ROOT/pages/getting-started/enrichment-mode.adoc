@@ -1,10 +1,10 @@
 [[enrichment-mode]]
 = Enrichment mode
 
-== Available enrichment modes
-
 Neo4j extracts change data capture information from transaction logs.
 Transaction logs by default do not contain any directly usable change data capture information, and the amount of change data to be captured is controlled by a new database level option named as transaction log enrichment mode.
+
+== Available enrichment modes
 
 Neo4j offers three levels of transaction log enrichment: `OFF`, `DIFF` and `FULL`.
 For change data capture procedures to work, the level of enrichment must be either `DIFF` or `FULL`.
@@ -23,7 +23,7 @@ With enrichment mode set to `FULL`, changes are recorded as a complete copy of t
 Enrichment mode is reflected in the output from change data capture procedures.
 On databases with `FULL` enrichment mode, The `event.state.before` and `event.state.after` fields contain the complete before and after state.
 With `DIFF` mode they only contain removals, updates and additions.
-For more details on the output schema see xref:procedures/output-schema.adoc[]
+For more details on the output schema see xref:procedures/output-schema.adoc[].
 
 
 == Modifying enrichment mode
@@ -77,7 +77,7 @@ Disabling enrichment immediately breaks the continuity of change events.
 Regular change identifiers generated before this point can no longer be used.
 Even if enrichment is re-enabled, the previously generated change identifiers will remain invalid.
 
-After re-enabling enrichment using outdated identifiers will lead to exceptions or inconsistent results.
+After re-enabling enrichment, using outdated identifiers will lead to exceptions or inconsistent results.
 The xref:procedures/current.adoc[cdc.current] or xref:procedures/earliest.adoc[cdc.earliest] procedures should be used to acquire a new starting point.
 
 Note that the identifiers returned by xref:procedures/earliest.adoc[cdc.earliest] has a special behaviour.

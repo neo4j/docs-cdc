@@ -7,7 +7,7 @@
 == Node Changes
 Change events for nodes follow this schema:
 
-[source, json]
+[source, json, role=nocollapse]
 ----
 {
   "id": "A7fjWXMK_0L6hztd4xhoy0oAAAAAAAAADAAAAAAAAAAA", // <1>
@@ -61,11 +61,11 @@ Change events for nodes follow this schema:
 <11> When the transaction containing this change started.
 <12> When the transaction containing this change was committed.
 <13> ElementId of the changed entity (node or relationship).
-<14> Keys identifying the changed entity. Requires constraints, see xref:setup/constraints.adoc[] for details.
+<14> Keys identifying the changed entity. Requires constraints, see xref:getting-started/constraints.adoc[] for details.
 <15> "n" or "r" indicating if the event changes a node or relationship.
-<16> A map describing the state of the entity before the change. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:setup/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
-<17> Properties of the entity after the change has been applied. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:setup/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
-<18> Labels of the entity after the change has been applied. May be limited to the labels of the entity that have changed when using `DIFF` enrichment mode. See xref:setup/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+<16> A map describing the state of the entity before the change. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+<17> Properties of the entity after the change has been applied. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+<18> Labels of the entity after the change has been applied. May be limited to the labels of the entity that have changed when using `DIFF` enrichment mode. See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
 <19> Type of change, `c` for creating an entity, `u` for updating an entity, `d` for deleting an entity.
 <20> Labels of the changed node. // TODO describe before & after behaviour.
 

@@ -27,6 +27,8 @@ TODO examples are similar to the movie graph, but not actually following the mov
 - For create events `event.state.before` is null
 - For delete events `event.state.after` is null
 - For update events neither is null, they might be empty maps for diff mode
+- Clustering support
+- Guarantee of changes in clustering
 
 *Current docs todos*
 

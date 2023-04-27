@@ -1,10 +1,10 @@
 * xref:index.adoc[]
 
-* xref:setup/index.adoc[]
-** xref:setup/key-considerations.adoc[]
-** xref:setup/feature-flag.adoc[]
-** xref:setup/enrichment-mode.adoc[]
-** xref:setup/constraints.adoc[]
+* xref:getting-started/index.adoc[]
+** xref:getting-started/key-considerations.adoc[]
+** xref:getting-started/feature-flag.adoc[]
+** xref:getting-started/enrichment-mode.adoc[]
+** xref:getting-started/constraints.adoc[]
 
 * xref:procedures/index.adoc[]
 ** xref:procedures/query.adoc[]
