@@ -14,8 +14,7 @@
 ** xref:procedures/output-schema.adoc[]
 
 
-* xref:selectors/selectors.adoc[]
-** xref:selectors/schema.adoc[]
+* xref:selectors/index.adoc[]
 ** xref:selectors/examples.adoc[]
 
 * xref:examples/index.adoc[]

@@ -4,7 +4,10 @@
 [[change-data-capture-output]]
 = Change event schema
 
+Contents of change events differ by the underlying entity.
+
 == Node Changes
+
 Change events for nodes follow this schema:
 
 [source, json, role=nocollapse]
@@ -34,46 +37,69 @@ Change events for nodes follow this schema:
     "eventType": "n", // <15>
     "state": {
       "before": null, // <16>
-      "after": {
-        "properties": { // <17>
+      "after": { // <17>
+        "properties": { // <18>
           "tagline": "Houston, we have a problem.",
           "title": "Apollo 13",
           "released": "1995"
         },
-        "labels": ["MOVIE"] // <18>
+        "labels": ["MOVIE"] // <19>
       }
     },
-    "operation": "c", // <19>
-    "labels": ["MOVIE"] // <20>
+    "operation": "c", // <20>
+    "labels": ["MOVIE"] // <21>
   }
 }
 ----
-<1> A unique id. It can be used to continue streaming subsequent changes. See xref:procedures/query.adoc[]
-<2> A number identifying which transaction the change happened in, unique in combination with `seq`. Transaction IDs are not continuous. Some transactions, such as system commands, are not recorded in change data capture and will cause gaps in the transaction ids.
-<3> A number used for ordering changes that happened in the same transaction.
-<4> Which user executed the query that caused this change. May be different from authenticatedUser when using impersonation. <TODO link to impersonation docs>
-<5> The authenticated user when the query was executed.
-<6> What transaction log enrichment mode was set to when this change was committed.
-<7> IP address and port of where the client connected from.
-<8> The server identifier which executed this transaction. <TODO link to SHOW SERVERS docs>
-<9> How the client connected to the server.
-<10> IP address and port of the server to which the client was connected.
-<11> When the transaction containing this change started.
-<12> When the transaction containing this change was committed.
-<13> ElementId of the changed entity (node or relationship).
-<14> Keys identifying the changed entity. Requires constraints, see xref:getting-started/constraints.adoc[] for details.
-<15> "n" or "r" indicating if the event changes a node or relationship.
-<16> A map describing the state of the entity before the change. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
-<17> Properties of the entity after the change has been applied. May be limited to the properties of the entity that have changed when using `DIFF` enrichment mode. See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
-<18> Labels of the entity after the change has been applied. May be limited to the labels of the entity that have changed when using `DIFF` enrichment mode. See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
-<19> Type of change, `c` for creating an entity, `u` for updating an entity, `d` for deleting an entity.
-<20> Labels of the changed node. // TODO describe before & after behaviour.
+<1> A unique change identifier that identifies this change record.
+Used as a cursor to continue querying changes from last processed change.
+<2> A number identifying which transaction the change happened in, unique in combination with `seq`.
+Transaction identifiers are not continuous.
+Some transactions, such as system and schema commands, are not recorded in change data capture and will cause gaps in the transaction identifiers.
+<3> A number used for ordering changes happened in the same transaction.
+Note that the order of changes observed in the output does not necessarily correspond to the order of changes applied during the transaction.
+<4> The user that performed this change.
+May be different from `authenticatedUser` when using impersonation.
+See link:{neo4j-docs-base-uri}/cypher-manual/{page-version}/administration/access-control/dbms-administration/#access-control-dbms-administration-impersonation[Cypher Manual -> Administration -> Access Control -> DBMS Administration] for more information on impersonation.
+<5> The authenticated user when this change was performed.
+<6> The transaction log enrichment mode at the time this change was captured.
+<7> The client's address (usually IP address and port but might change based on protocol).
+<8> The identifier of the server that performed this change.
+See link:{neo4j-docs-base-uri}/cypher-manual/{page-version}/administration/servers/#server-management-show-servers[Cypher Manual -> Administration -> Server management] for more information on servers.
+<9> The protocol under which the client is connected through.
+<10> The server's address (usually IP address and port but might change based on protocol).
+<11> The timestamp when the underlying transaction started.
+<12> The timestamp when the underlying transaction committed.
+<13> The element id of the changed entity (node or relationship).
+See link:{neo4j-docs-base-uri}/cypher-manual/{page-version}/functions/scalar/#functions-elementid[Cypher Manual -> Functions -> Scalar functions] for more information on element ids.
+<14> The keys identifying the changed entity.
+Requires specific constraint types defined on entities, see xref:getting-started/constraints.adoc[] for details.
+<15> Type of the changed entity: `n` for nodes and `r` for relationships.
+<16> A map describing the state of the entity before the change.
+This field is always `NULL` for create events.
+When on `DIFF` enrichment mode, it will be limited to the properties and labels of the entity that have changed.
+See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+This field always contains the full state of the entity for delete events, regardless of the enrichment mode being set to `DIFF` or `FULL`.
+<17> A map describing the state of the entity after the change.
+This field is always `NULL` for delete events.
+When on `DIFF` enrichment mode, it will be limited to the properties and labels of the entity that have changed.
+See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+This field always contains the full state of the entity for create events, regardless of the enrichment mode being set to `DIFF` or `FULL`.
+<18> A map of properties of the entity after the change.
+<19> List of labels of the node after the change has been applied.
+When on `DIFF` enrichment mode, it will be limited to the changed labels.
+See xref:getting-started/enrichment-mode.adoc#enrichment-mode[enrichment mode] for details.
+<20> Type of the operation: `c` for creates, `u` for updates, and `d` for deletions.
+<21> List of labels of the changed node.
+This list always populated from the `before` state of the node.
+It will contain the complete set of labels regardless of the enrichment mode.
 
 
 == Relationship changes
-Change events for relationships follow a similar schema to node changes. The differences are annotated below.
+Change events for relationships follow a similar schema to node changes.
+Note that only the differences are annotated below.
 
-[source, json]
+[source, json, role=nocollapse]
 ----
 {
   "id": "A2pK9P_aOknnrnEsCsPB_BoAAAAAAAAADwAAAAAAAAAA",
@@ -120,10 +146,11 @@ Change events for relationships follow a similar schema to node changes. The dif
   }
 }
 ----
-<1> A map containing information about the start node for the changed relationship.
-<2> ElementId of the start node for the changed relationship.
-<3> Keys specified on the start node for the changed relationship.
-<4> Labels on the start node for the changed relationship.
-<5> Same schema as start. A map containing information about the end node for the changed relationship.
-<6> Relationships do not have labels, and thus there is no field for labels in the after state.
-<7> Relationships have type rather than label.
+<1> A map containing information about the start node.
+<2> Element id of the start node.
+<3> Keys (if related constraints are defined) of the start node.
+<4> List of labels of the start node.
+<5> Same set of information defined above for the end node.
+<6> Since relationships do not have labels, `labels`.
+<7> Relationship type.
+Since relationships do not have labels, there is no field for labels in the after state.

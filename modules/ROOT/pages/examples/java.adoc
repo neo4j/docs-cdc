@@ -1,6 +1,6 @@
 = Example CDC usage in java
 
-[source, java]
+[source, java, role="nocollapse"]
 ----
 public class CDCService implements Closeable {
     private final Driver driver;

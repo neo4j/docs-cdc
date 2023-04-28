@@ -34,7 +34,7 @@ This value is treated as exclusive and the results of the query will not include
 To get a `from` value for the first iteration, see xref:procedures/current.adoc[cdc.current] and xref:procedures/earliest.adoc[cdc.earliest].
 <2> An optional list of selectors that could be used to filter out changes.
 Default is an empty list, which means _all_ changes will be returned without any filtering taking place.
-See xref:selectors/selectors.adoc[selectors] for details.
+See xref:selectors/index.adoc[selectors] for details.
 <3> A unique change identifier that identifies each change record.
 Used as a cursor to continue querying changes from last processed change.
 <4> A number identifying which transaction the change happened in, unique in combination with `seq`.
