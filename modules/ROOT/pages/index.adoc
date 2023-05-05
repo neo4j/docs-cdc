@@ -1,6 +1,11 @@
 [role=enterprise-edition]
 [[change-data-capture]]
+ifdef::backend-pdf[]
+= Change data capture
+endif::[]
+ifndef::backend-pdf[]
 = Introduction
+endif::[]
 
 Change data capture (CDC) allows you to capture and track changes to your database in real-time, enabling you to keep your other data sources up-to-date and accurate.
 With CDC, you can identify and respond to changes (create, update, and delete) on your graph entities (nodes and relationships) as they happen, and integrate these changes into other systems and applications.
