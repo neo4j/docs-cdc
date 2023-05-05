@@ -151,6 +151,5 @@ Note that only the differences are annotated below.
 <3> Keys (if related constraints are defined) of the start node.
 <4> List of labels of the start node.
 <5> Same set of information defined above for the end node.
-<6> Since relationships do not have labels, `labels`.
+<6> Since relationships do not have labels, there is no field for labels in the before / after state.
 <7> Relationship type.
-Since relationships do not have labels, there is no field for labels in the after state.
