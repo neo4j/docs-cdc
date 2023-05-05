@@ -1,7 +1,7 @@
 [[current]]
-= Getting the current change id
+= Acquiring the current change id
 
-The procedure `cdc.current` is used to get a change identifier for the last committed transaction.
+The procedure `cdc.current` is used to acquire a change identifier for the last committed transaction.
 Note that the returned identifier is exclusive, and will not include the changes happened in the transaction that it points to.
 
 .Signature

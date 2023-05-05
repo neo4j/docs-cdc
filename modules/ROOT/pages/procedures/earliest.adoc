@@ -1,7 +1,7 @@
 [[earliest]]
-= Getting the earliest change id
+= Acquiring the earliest change id
 
-The procedure `cdc.earliest` is used to get a change identifier for the earliest available change.
+The procedure `cdc.earliest` is used to acquire a change identifier for the earliest available change.
 
 .Signature
 [source]
