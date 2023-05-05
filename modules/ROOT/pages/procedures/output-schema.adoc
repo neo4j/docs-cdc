@@ -1,6 +1,3 @@
-// suppress inspection "JsonStandardCompliance" for whole file
-// ^ Avoid errors on "// <1>" annotations in json source blocks
-
 [[change-data-capture-output]]
 = Change event schema
 

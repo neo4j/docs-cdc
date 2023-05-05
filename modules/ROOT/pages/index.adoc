@@ -1,9 +1,3 @@
-// suppress inspection "JsonStandardCompliance" for whole file
-// ^ Avoid errors on "// <1>" annotations in json source blocks
-
-// Creating a cdc enabled build:
-// Add CDC dependency to private/enterprise/neo4j-enterprise/pom.xml
-
 [role=enterprise-edition]
 [[change-data-capture]]
 = Introduction
