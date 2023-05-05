@@ -1,5 +1,5 @@
 [[current]]
-= Acquiring the current change id
+= Acquiring the current change identifier
 
 The procedure `cdc.current` is used to acquire a change identifier for the last committed transaction.
 Note that the returned identifier is exclusive, and will not include the changes happened in the transaction that it points to.
@@ -13,6 +13,12 @@ cdc.current() :: (
 ----
 
 <1> A change identifier that refers to the last committed transaction.
+
+[WARNING]
+====
+Change identifiers are local to the database they are generated for, and cannot be used to query changes on another database.
+You should consider this when restoring a database from a backup, since the restored database is practically a new database.
+====
 
 ====
 .Query current change identifier

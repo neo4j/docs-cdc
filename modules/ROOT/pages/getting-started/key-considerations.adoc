@@ -11,6 +11,7 @@ Please ensure that you have plenty of available space.
 // TODO: how much, can we give a ballpoint figure?
 
 
+[[log-retention]]
 == Transaction log retention
 
 Since Neo4j stores change data capture information inside transaction log entries, it is important that you configure your transaction log retention period based on your requirements.

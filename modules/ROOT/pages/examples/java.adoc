@@ -1,4 +1,4 @@
-= Example CDC usage in java
+= Example CDC usage in Java
 
 [source, java, role="nocollapse"]
 ----

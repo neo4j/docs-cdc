@@ -1,0 +1,3 @@
+= Example CDC usage in Go
+
+_To be prepared._

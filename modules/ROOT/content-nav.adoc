@@ -20,7 +20,7 @@
 * xref:examples/index.adoc[]
 ** xref:examples/java.adoc[]
 
-
+* xref:troubleshooting.adoc[]
 
 //* xref:getting-started.adoc[]
 //* xref:content-types.adoc[]
