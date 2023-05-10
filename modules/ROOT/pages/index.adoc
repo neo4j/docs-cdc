@@ -4,6 +4,8 @@ ifdef::backend-pdf[]
 
 = Change Data Capture Early Access Program
 
+== Introduction
+
 endif::[]
 ifndef::backend-pdf[]
 
