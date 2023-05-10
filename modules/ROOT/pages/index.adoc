@@ -1,7 +1,9 @@
 [role=enterprise-edition]
 [[change-data-capture]]
 ifdef::backend-pdf[]
-= Change data capture
+= Change Data Capture Early Access Program
+
+include::partial$notes.adoc[]
 endif::[]
 ifndef::backend-pdf[]
 = Introduction
@@ -18,6 +20,8 @@ We will also provide you with best practices and troubleshooting tips to ensure 
 
 == Known Limitations
 
+=== Neo4j 5.8
+
 * CDC in a cluster environment might raise errors when a CDC query is completed in one cluster member and the next query is executed in another member that has just completed a store copy.
 Retrying the query on a different member might help resolve the error.
-_**There is already work going on to have a consistent view of transaction logs on all cluster members that host the database in question, but this view will only be limited to cover the period defined by `db.tx_log.rotation.retention_policy` setting.**_
+_**A future Early Access Program build will include full support of clusters and Aura (ETA June 2023) through a consistent view of transaction logs on all cluster members that host the database in question, where this view being limited to cover the period defined by `db.tx_log.rotation.retention_policy` setting.**_

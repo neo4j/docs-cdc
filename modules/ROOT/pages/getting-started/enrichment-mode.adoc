@@ -19,12 +19,9 @@ With enrichment mode set to `DIFF`, changes are captured as the difference betwe
 === `FULL`
 With enrichment mode set to `FULL`, changes are recorded as a complete copy of the before and after states of each changed entity.
 
-//TODO: should we move these to the corresponding sections?
-Enrichment mode is reflected in the output from change data capture procedures.
 On databases with `FULL` enrichment mode, The `event.state.before` and `event.state.after` fields contain the complete before and after state.
 With `DIFF` mode they only contain removals, updates and additions.
 For more details on the output schema see xref:procedures/output-schema.adoc[].
-
 
 == Modifying enrichment mode
 
@@ -54,6 +51,14 @@ For `FULL` log enrichment mode, replace `DIFF` with `FULL`.
 ----
 ALTER DATABASE name SET OPTION txLogEnrichment "DIFF"
 ----
+
+[IMPORTANT]
+====
+Modifying enrichment mode from `DIFF` to `FULL` or vice versa is perfectly fine, but be aware that the captured change data will immediately reflect the new enrichment mode.
+Your CDC application must be able to deal with these changes.
+
+Enrichment mode is reflected in the output from change data capture procedures.
+====
 
 === Disabling log enrichment
 
