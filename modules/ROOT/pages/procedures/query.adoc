@@ -2,7 +2,7 @@
 = Querying changes
 
 The procedure `cdc.query` is used to query the database for captured changes.
-Once all changes have been streamed the query will terminate.
+Once all changes have been streamed the query terminates.
 
 [NOTE]
 ====
@@ -10,7 +10,7 @@ Since the transaction logs get pruned regularly, changes are only available for 
 See link:{neo4j-docs-base-uri}/operations-manual/{page-version}/configuration/transaction-logs/#transaction-logging-log-pruning[Operations Manual -> Configuration -> Transaction Log] for more details.
 
 Changes also stop being available if xref:getting-started/enrichment-mode.adoc[enrichment mode] is disabled.
-Even if it gets enabled again, it will not be possible to query the previous change records.
+Even if enabled again, it is not possible to query the previous change records.
 ====
 
 .Signature
@@ -30,20 +30,20 @@ cdc.query(
 
 <1> The change identifier, either captured from an earlier call to `cdc.query` or from one of `cdc.current` or `cdc.earliest`, to query the captured changes from.
 Default value is `""` (empty string) which is replaced with `cdc.current` implicitly.
-This value is treated as exclusive and the results of the query will not include the change corresponding to this value.
+This value is treated as exclusive and the results of the query do not include the change corresponding to this value.
 To get a `from` value for the first iteration, see xref:procedures/current.adoc[cdc.current] and xref:procedures/earliest.adoc[cdc.earliest].
 <2> An optional list of selectors that could be used to filter out changes.
-Default is an empty list, which means _all_ changes will be returned without any filtering taking place.
+Default is an empty list, which means _all_ changes are returned without any filtering taking place.
 See xref:selectors/index.adoc[selectors] for details.
 <3> A unique change identifier that identifies each change record.
 Used as a cursor to continue querying changes from last processed change.
 <4> A number identifying which transaction the change happened in, unique in combination with `seq`.
 Transaction identifiers are not continuous.
-Some transactions, such as system and schema commands, are not recorded in change data capture and will cause gaps in the transaction identifiers.
+Some transactions, such as system and schema commands, are not recorded in change data capture and cause gaps in the transaction identifiers.
 <5> A number used for ordering changes happened in the same transaction.
 Note that the order of changes observed in the output does not necessarily correspond to the order of changes applied during the transaction.
 <6> A map of values that contain metadata information about the transaction.
-This will be same for all of the changes in a single transaction.
+This is the same for all of the changes in a single transaction.
 For a detailed description of metadata fields, see xref:procedures/output-schema.adoc[].
 <7> A set of information describing the change on the entity.
 For a detailed description of change event, see xref:procedures/output-schema.adoc[].

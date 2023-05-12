@@ -2,7 +2,8 @@
 
 [NOTE]
 ====
-The examples in this section assume that the parameter '$previousChangeId' has been populated with a change id. Either from the result of a previous xref:procedures/query.adoc[query] or using the xref:procedures/current.adoc[current] or xref:procedures/earliest.adoc[earliest] procedures.
+The examples in this section assume that the parameter '$previousChangeId' is populated with a change id. 
+Either from the result of a previous xref:procedures/query.adoc[query] or from using the xref:procedures/current.adoc[current] or xref:procedures/earliest.adoc[earliest] procedures.
 ====
 
 == Selecting entities based on operation type
@@ -101,7 +102,7 @@ CALL cdc.query($previousChangeId, [{
 
 [NOTE]
 ====
-If the related constraints are added after a change on an entity is captured, the previous change events will not be updated retroactively and will not match key selectors.
+If the related constraints are added after a change on an entity is captured, the previous change events are not updated retroactively and do not match key selectors.
 ====
 
 == Selecting nodes by label
@@ -118,7 +119,7 @@ CALL cdc.query($previousChangeId, [{
 
 [NOTE]
 ====
-The query above will only return changes on nodes that have *both* labels.
+The query above only returns changes on nodes that have *both* labels.
 In order to get changes on nodes with either label, two separate selectors have to be specified.
 See xref:selectors/index.adoc#combining-selectors[combining selectors] for details.
 ====

@@ -54,7 +54,7 @@ ALTER DATABASE name SET OPTION txLogEnrichment "DIFF"
 
 [IMPORTANT]
 ====
-Modifying enrichment mode from `DIFF` to `FULL` or vice versa is perfectly fine, but be aware that the captured change data will immediately reflect the new enrichment mode.
+Modifying enrichment mode from `DIFF` to `FULL` or vice versa is fine, but be aware that the captured change data immediately reflects the new enrichment mode.
 Your CDC application must be able to deal with these changes.
 
 Enrichment mode is reflected in the output from change data capture procedures.

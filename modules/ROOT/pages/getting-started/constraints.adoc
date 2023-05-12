@@ -7,17 +7,17 @@ The only requirement for this is to have a corresponding `node key` and `relatio
 
 [NOTE]
 ====
-Note that `node key` constraint is equivalent to having both `unique node property` and `node property existence` constraints defined on the same property/properties.
-Similarly, `relationship key` constraint is also equivalent to having both `unique relationship property` and `relationship property existence` constraints defined on the same property/properties.
+Note that the `node key` constraint is equivalent to having both `unique node property` and `node property existence` constraints defined on the same property/properties.
+Similarly, the `relationship key` constraint is also equivalent to having both `unique relationship property` and `relationship property existence` constraints defined on the same property/properties.
 ====
 
-Having these `key` constraints defined on entities, all of the participating property values will be captured as `event.keys` field on node changes and `event.key` field on relationship changes.
-Furthermore, a relationship change will also include the corresponding participating key property values for the relationship's `start` and `end` nodes.
+Having these `key` constraints defined on entities, all of the participating property values are captured as `event.keys` field on node changes and `event.key` field on relationship changes.
+Furthermore, a relationship change also includes the corresponding participating key property values for the relationship's `start` and `end` nodes.
 
 [WARNING]
 ====
-If the node or relationship key constraints (and also the equivalents) are added after a change event is captured, the previously captured change events will not be updated with key information retroactively.
-The key properties will be captured from the point the corresponding constraints are created.
+If the node or relationship key constraints (and also the equivalents) are added after a change event is captured, the previously captured change events are not updated with key information retroactively.
+The key properties are captured from the point the corresponding constraints are created.
 ====
 
 == Node keys
@@ -36,7 +36,7 @@ CREATE CONSTRAINT person_key IF NOT EXISTS FOR (n:Person) REQUIRE (n.firstName, 
 CREATE CONSTRAINT employee_key IF NOT EXISTS FOR (n:Employee) REQUIRE (n.id) IS NODE KEY
 ----
 
-Whenever a change happens on a node with `Person` label with `firstName` and `lastName` properties set as `john` and `doe` respectively, the change event will include the following key information.
+Whenever a change happens on a node with `Person` label with `firstName` and `lastName` properties set as `john` and `doe` respectively, the change event includes the following key information.
 
 [source, json]
 ----
@@ -54,7 +54,7 @@ Whenever a change happens on a node with `Person` label with `firstName` and `la
 }
 ----
 
-Likewise, whenever a change happens on a node with `Employee` label with `id` property set as `1001`, the change event will include the following key information.
+Likewise, whenever a change happens on a node with `Employee` label with `id` property set as `1001`, the change event includes the following key information.
 
 [source, json]
 ----
@@ -71,7 +71,7 @@ Likewise, whenever a change happens on a node with `Employee` label with `id` pr
 }
 ----
 
-If, on the other hand, the changed node has both `Person` and `Employee` labels with `firstName`, `lastName` and `id` properties set as `john`, `doe` and `1001` respectively, the change event will include the following key information.
+If, on the other hand, the changed node has both `Person` and `Employee` labels with `firstName`, `lastName` and `id` properties set as `john`, `doe` and `1001` respectively, the change event includes the following key information.
 
 [source, json]
 ----
@@ -96,7 +96,7 @@ For a full description of change record schema, see xref:procedures/output-schem
 
 [NOTE]
 ====
-Although the preferred way of specifying node key properties is creating `node key` constraint, the same can be achieved using both `unique node property` and `node property existence` constraints on the same set of properties.
+Although the preferred way of specifying node key properties is creating a `node key` constraint, the same can be achieved using both `unique node property` and `node property existence` constraints on the same set of properties.
 
 [source, cypher]
 ----
@@ -118,7 +118,7 @@ Assume that we have the following constraints for `MARRIED_TO` relationship type
 CREATE CONSTRAINT married_to_key FOR ()-[r:MARRIED_TO]-() REQUIRE (r.registerId) IS RELATIONSHIP KEY
 ----
 
-Whenever a change happens on a relationship of type `MARRIED_TO` with `registerId` property set as `1125`, the change event will include the following key information.
+Whenever a change happens on a relationship of type `MARRIED_TO` with `registerId` property set as `1125`, the change event includes the following key information.
 
 [source, json]
 ----

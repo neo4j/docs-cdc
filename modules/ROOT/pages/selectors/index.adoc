@@ -127,8 +127,8 @@ The only exception is that you cannot specify `operation` and `changesTo` fields
 [[combining-selectors]]
 == Combining selectors
 
-The more specific a selector is, the fewer changes will be returned.
-For example, specifying both `name` and `surname` as a `changesTo` value will only return changes where both `name` *and* `surname` properties have changed within the same transaction.
+The more specific a selector is, the fewer changes are returned.
+For example, specifying both `name` and `surname` as a `changesTo` value only returns changes where both `name` *and* `surname` properties have changed within the same transaction.
 
 .Query changes updating both `name` and `surname` properties
 [source, cypher]
