@@ -1,5 +1,6 @@
 [[troubleshooting]]
 = Troubleshooting
+:description: This chapter describes common change data capture related errors.
 
 You can find a list of error codes and causes that are used by change data capture procedures.
 

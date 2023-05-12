@@ -110,7 +110,7 @@ For details about constraints and syntax of related commands, see link:{neo4j-do
 
 == Relationship keys
 
-Assume that we have the following constraints for `MARRIED_TO` relationship type.
+Assume that you have the following constraints for `MARRIED_TO` relationship type.
 
 .Relationship key for `MARRIED_TO` type
 [source, cypher]

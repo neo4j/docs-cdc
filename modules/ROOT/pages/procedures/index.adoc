@@ -1,7 +1,7 @@
 [role=enterprise-edition]
 [[procedures]]
 = Procedures
-:description: This chapter describes change data capture procedures
+:description: This chapter describes change data capture procedures.
 
 This chapter describes the following:
 

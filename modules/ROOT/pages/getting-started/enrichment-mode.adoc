@@ -80,7 +80,7 @@ ALTER DATABASE name REMOVE OPTION txLogEnrichment
 ====
 Disabling enrichment immediately breaks the continuity of change events.
 Regular change identifiers generated before this point can no longer be used.
-Even if enrichment is re-enabled, the previously generated change identifiers will remain invalid.
+Even if enrichment is re-enabled, the previously generated change identifiers remain invalid.
 
 After re-enabling enrichment, using outdated identifiers will lead to exceptions or inconsistent results.
 The xref:procedures/current.adoc[cdc.current] or xref:procedures/earliest.adoc[cdc.earliest] procedures should be used to acquire a new starting point.

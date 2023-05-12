@@ -1,5 +1,6 @@
 [[cdc-selectors]]
 = Selectors
+:description: This chapter describes how to filter captured change data.
 
 `cdc.query` procedure support filtering returned changes using user provided selectors.
 
