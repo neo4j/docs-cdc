@@ -2,10 +2,21 @@
 
 [source, java, role="nocollapse"]
 ----
+import java.io.Closeable;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Query;
+
 public class CDCService implements Closeable {
     private final Driver driver;
-    private String cursor;
     private final ScheduledThreadPoolExecutor scheduler;
+    private final AtomicReference<String> cursor = new AtomicReference<>(null);
 
     private List<Map<String, Object>> selectors = List.of();
 
@@ -17,7 +28,6 @@ public class CDCService implements Closeable {
     @Override
     public void close() {
         driver.close();
-        scheduler.shutdown();
     }
 
     private void setSelectors(List<Map<String, Object>> selectors) {
@@ -42,52 +52,57 @@ public class CDCService implements Closeable {
         }
     }
 
-    private List<Record> changes(String from, List<Map<String, Object>> selectors) {
-        driver.verifyConnectivity();
+    private void processChanges() {
         try (var session = driver.session()) {
-            return session.executeRead(tx -> {
-                var result = tx.run(new Query("CALL cdc.query($from, $selectors)", Map.of("from", from, "selectors", selectors)));
-                return result.stream().toList();
+            session.executeRead(tx -> {
+                var result = tx.run(new Query(
+                        "CALL cdc.query($from, $selectors)", Map.of("from", cursor.get(), "selectors", selectors)));
+
+                while (result.hasNext()) {
+                    var change = result.next();
+                    applyChange(change);
+                    cursor.set(change.get("id").asString());
+                }
+
+                return cursor.get();
             });
         } catch (Exception e) {
-            System.err.println(e);
+            throw new RuntimeException("Error querying/processing changes.", e);
         }
-        return List.of();
     }
 
     public void start() {
-        cursor = currentChangeID();
-        scheduler.scheduleWithFixedDelay(this::queryChanges, 0, 500, TimeUnit.MILLISECONDS);
+        cursor.set(currentChangeID());
+        scheduler.scheduleWithFixedDelay(this::processChanges, 0, 500, TimeUnit.MILLISECONDS);
+        Runtime.getRuntime().addShutdownHook(new Thread(scheduler::shutdownNow));
     }
 
-    private synchronized void queryChanges() {
-        var changes = changes(cursor, selectors);
-        for (Record change : changes) {
-            cursor = change.get("id").asString();
-            applyChange(change);
-        }
-    }
-
-    private void applyChange(Record change) {
+    private void applyChange(org.neo4j.driver.Record change) {
         var eventType = change.get("event").asMap().get("eventType");
         var operation = change.get("event").asMap().get("operation");
-        System.out.println("Element of type '%s' changed with operation '%s'".formatted(eventType, operation));
+        System.out.printf("Element of type '%s' changed with operation '%s'%n", eventType, operation);
         System.out.println(change);
     }
 
     public static void main(String... args) {
+        try (var cdcService = new CDCService("bolt://localhost:7687", "neo4j", "passw0rd")) {
+            List<Map<String, Object>> selectors = List.of(
+                    Map.of("select", "n") // Only select nodes
+                    );
+            cdcService.setSelectors(selectors);
+            cdcService.start();
 
-        var cdcService = new CDCService("bolt://localhost:7687", "neo4j", "passw0rd");
-        List<Map<String, Object>> selectors = List.of(
-                Map.of("select", "n") // Only select nodes
-//                Map.of("select", "n", "changesTo", List.of("username")) // Only select nodes where the username was updated
-        );
-        cdcService.setSelectors(selectors);
-        cdcService.start();
+            System.out.println("started querying changes...");
 
-        // Prevent thread from exiting...
-        while(true) {}
-//        cdcService.close();
+            try {
+                cdcService.scheduler.awaitTermination(1, TimeUnit.DAYS);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            System.out.println("quitting...");
+            System.out.flush();
+        }
     }
 }
 ----
