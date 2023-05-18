@@ -1,7 +1,6 @@
 = Example CDC usage in Go
 
-_To be prepared._
-[source, go, role="nocollapse"]
+[source, golang, role="nocollapse"]
 ----
 package main
 
