@@ -13,8 +13,8 @@ function applyChange(change) { // <1>
   console.log(util.inspect(change.toObject(), false, null, true));
 }
 
-async function queryChanges(driver, cursor, selectors) {
-  const session = driver.session();
+async function queryChanges(driver, database, cursor, selectors) {
+  const session = driver.session({database: database});
   try {
     await session.executeRead((tx) => {
       return tx.run('CALL cdc.query($from, $selectors)',
@@ -34,22 +34,22 @@ async function queryChanges(driver, cursor, selectors) {
   return cursor;
 }
 
-function queryChangesLoop(driver, cursor, selectors) {
+function queryChangesLoop(driver, database, cursor, selectors) {
   setTimeout(async () => {
-    cursor = await queryChanges(driver, cursor, selectors);
-    queryChangesLoop(driver, cursor, selectors);
+    cursor = await queryChanges(driver, database, cursor, selectors);
+    queryChangesLoop(driver, database, cursor, selectors);
   }, 500);
 }
 
-function earliestChangeId(driver) { // <5>
-  return driver.executeQuery('CALL cdc.earliest')
+function earliestChangeId(driver, database) { // <5>
+  return driver.executeQuery('CALL cdc.earliest', {}, {database: database})
       .then((res) => {
         return res.records[0].get('id');
       });
 }
 
-function currentChangeId(driver) { // <6>
-  return driver.executeQuery('CALL cdc.current')
+function currentChangeId(driver, database) { // <6>
+  return driver.executeQuery('CALL cdc.current', {}, {'database': database})
       .then((res) => {
         return res.records[0].get('id');
       });
@@ -66,13 +66,13 @@ async function main() {
   const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 
   if (!cursor) {
-    cursor = await currentChangeId(driver);
+    cursor = await currentChangeId(driver, database);
   }
 
   const selectors = [ // <7>
     // {"select":"n"}
   ];
-  queryChangesLoop(driver, cursor, selectors); // <8>
+  queryChangesLoop(driver, database, cursor, selectors); // <8>
 
   // await driver.close() // <9>
 }
