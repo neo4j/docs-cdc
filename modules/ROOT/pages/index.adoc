@@ -20,3 +20,27 @@ The CDC feature is straightforward to set up and use and allows you to quickly a
 
 The documentation guides you through the process of setting up CDC, configuring it to capture the changes, and querying those changes for further processing, such as replicating to another system.
 It also contains best practices and troubleshooting tips to ensure that your CDC implementation runs smoothly.
+
+== Availability
+The following table shows which products support change data capture.
+
+[options="header",cols="1,1,1"]
+|===
+| Product | CDC availability | Note
+
+| AuraDB Free
+| label:beta[] label:new[Introduced in 5.13]
+| Not available in Graph Data Science
+
+| AuraDB Professional
+| label:beta[] label:new[Introduced in 5.13]
+| Not available in Graph Data Science
+
+| AuraDB Enterprise
+| label:beta[] label:new[Introduced in 5.13]
+| Not available in Graph Data Science
+
+| Enterprise edition
+| label:beta[] label:new[Introduced in 5.13]
+|
+|===
