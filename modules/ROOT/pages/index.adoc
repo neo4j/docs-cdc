@@ -26,14 +26,14 @@ It also contains best practices and troubleshooting tips to ensure that your CDC
 The CDC feature is available as a public beta with Neo4j Enterprise Edition 5.13 and AuraDB Enterprise.
 
 === Neo4j 5.13
-As of Neo4j 5.13 the cdc feature has the following known issues.
+As of Neo4j 5.13 the CDC feature has the following known issues.
 
 ==== Entity keys
 Neo4j permits multiple `KEY` constraints on any given label.
-Change data capture does not distinguish between separate key entries for the same label and merges the properties from each key constraint into one map.
+CDC does not distinguish between separate keys per node label/relationship type and merges the properties from each key constraint into one map.
 This may lead to unexpected behaviour around selecting changes by node or relationship key.
 
-There will likely be API changes to resolve this issue during the beta phase.
+The API may change during Beta to resolve this issue.
 
 ==== Selector behaviour
 In Neo4j 5.13 change selectors are evaluated against the state of the changed entity as it was before the change was applied.
@@ -43,4 +43,4 @@ As an example, the following change would not be returned when using the selecto
 
 `MATCH (n:OLD_LABEL) SET n:NEW_LABEL REMOVE n:OLD_LABEL`
 
-An update, to instead evaluate the selector against a combination of `before` and `after` state, will be considered during the beta phase.
+The behaviour may change during Beta to evaluate the selector against a combination of `before` and `after` states.

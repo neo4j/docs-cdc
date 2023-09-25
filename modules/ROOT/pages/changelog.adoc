@@ -1,6 +1,6 @@
 = Changelog
 
-This page lists changes to the Change Data Capture feature in different versions of neo4j.
+This page lists changes to the Change Data Capture feature in different versions of Neo4j.
 
 == Version 5.13
 === Updated features
