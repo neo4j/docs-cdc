@@ -36,11 +36,14 @@ This may lead to unexpected behaviour around selecting changes by node or relati
 The API may change during Beta to resolve this issue.
 
 ==== Selector behaviour
-In Neo4j 5.13 change selectors are evaluated against the state of the changed entity as it was before the change was applied.
+In Neo4j 5.13, change selectors are evaluated against the state of the changed entity as it was _before_ the change was applied.
 This may lead to unexpected behaviour when selecting changes based on properties that have changed.
 
-As an example, the following change would not be returned when using the selector `{select:n, labels:[NEW_LABEL]}`
+As an example, the following change would not be returned when using the selector `{select:n, labels:[NewLabel]}`
 
-`MATCH (n:OLD_LABEL) SET n:NEW_LABEL REMOVE n:OLD_LABEL`
+[code, cypher]
+----
+MATCH (n:OldLabel) SET n:NewLabel REMOVE n:OldLabel
+----
 
 The behaviour may change during Beta to evaluate the selector against a combination of `before` and `after` states.
