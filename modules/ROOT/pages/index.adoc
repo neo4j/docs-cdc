@@ -25,6 +25,8 @@ It also contains best practices and troubleshooting tips to ensure that your CDC
 
 The CDC feature is available as a public beta with Neo4j Enterprise Edition 5.13 and AuraDB Enterprise.
 
+== Known Issues
+
 === Neo4j 5.13
 As of Neo4j 5.13 the CDC feature has the following known issues.
 
