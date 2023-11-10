@@ -18,7 +18,7 @@ Furthermore, a relationship change also includes the corresponding participating
 
 [WARNING]
 ====
-If the or relationship key constraints are added after a change event is captured, the previously captured change events are not updated with key information retroactively.
+If the node or relationship key constraints are added after a change event is captured, the previously captured change events are not updated with key information retroactively.
 The key properties are captured from the point the corresponding constraints are created.
 ====
 
