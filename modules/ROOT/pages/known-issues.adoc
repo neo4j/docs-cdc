@@ -10,7 +10,7 @@ Neo4j provides an updated changeId with each change returned through xref:proced
 
 ==== Mitigations
 - The issue can be avoided by performing all change filtering on the client side instead of using selectors.
-- The issue can be mitigated by ensuring that ones selectors include enough changes within the timeframe dictated by xref:getting-started/key-considerations.adoc#log-retention[transaction log retention] settings to keep the changeId updated.
+- The issue can be mitigated by ensuring that provided selectors include enough changes within the timeframe dictated by xref:getting-started/key-considerations.adoc#log-retention[transaction log retention] settings to keep the changeId updated.
 
 The API is likely to change during Beta to resolve this issue.
 
