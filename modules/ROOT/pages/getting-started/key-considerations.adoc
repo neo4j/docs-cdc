@@ -65,8 +65,10 @@ The options column of `SHOW DATABASES YIELD name, options` shows the transaction
 . *Verify that your CDC application is caught up and has consumed all changes in the database.*
 . *Stop your CDC application.*
 . *Restore your database from backup.*
+. *Set the restored database into read only mode.*
 . *Ensure that the restored database has the same `txLogEnrichment` value as your existing database.* +
 Compare the output of `SHOW DATABASES YIELD name, options` with the value noted down in step 2.
+If necessary update the value using the `ALTER DATABASE` command (link:{neo4j-docs-base-uri}/operations-manual/{page-version}/database-administration/standard-databases/manage-databases#alter-database-options[Operations Manual -> Database administration -> Standard databases -> Managing Databases -> Alter database options]).
 . *Restart your CDC application, using xref:procedures/earliest.adoc[db.cdc.earliest] as the starting cursor.*
 . *Enable writes to the restored database.*
 . *Verify that changes are consumed as by your CDC application.*
