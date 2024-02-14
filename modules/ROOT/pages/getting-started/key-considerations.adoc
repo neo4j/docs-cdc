@@ -49,7 +49,7 @@ Restoring your Neo4j database from a backup is likely to cause *loss of data and
 ====
 === Loss of change events
 The Neo4j restore procedures replace the existing database with a *new* database.
-This database has a new transaction log and any changeID (cursor) generated from the old transaction log will not be usable with the new database.
+This database has a new transaction log and any change identifier (cursor) generated from the old transaction log will not be usable with the new database.
 Furthermore, care has to be taken that the transaction log retention setting of the restored database matches that of your existing database.
 
 Follow the steps outlined below in order to mitigate this issue.
@@ -86,7 +86,7 @@ If the node/relationship is (re-)created in your Neo4j database, your CDC applic
 
 . *'Missing' entities* +
 A node/relationship that was dropped between the snapshot and restore operation does not exist in your CDC application but does now exist in the Neo4j database (again).
-If the node/relationship is updated, your CDC application will se an update to a previously deleted entity.
+If the node/relationship is updated, your CDC application will see an update to a previously deleted entity.
 
 . *Out of sync attributes* +
 Changes on attributes may have been rolled back in the restore operation.
