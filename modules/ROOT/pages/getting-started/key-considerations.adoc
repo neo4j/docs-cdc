@@ -97,7 +97,7 @@ If the node/relationship is updated, your CDC application sees an update to a pr
 
 . *Out of sync attributes* +
 Changes on attributes may have been rolled back in the restore operation.
-For example a Movie node in your Neo4j database may have a rating of 5 stars, whereas the latest change that your CDC application consumed changed the rating from 5 stars to 3 stars.
-Causing the two systems to treat the node differently.
+For example, a `Movie` node in your Neo4j database may have a rating of 5 stars, whereas the latest change that your CDC application consumed changed the rating from 5 stars to 3 stars.
+Which could cause the two systems to treat the node differently.
 
 If your CDC application relies on an internal state it is likely required to restore the state of your CDC application as if it was working with a new database with existing data. For details on this process read the xref:_using_cdc_with_existing_databases[relevant section above].
