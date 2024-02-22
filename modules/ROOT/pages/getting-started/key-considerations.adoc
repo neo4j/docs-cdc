@@ -58,7 +58,7 @@ The following steps outline how to mitigate this issue:
 [NOTE]
 ====
 The steps outlined here ensure that all change events are transmitted to your CDC application. 
-Depending on your application however, these change events might still be unexpected and cause further issues. 
+Depending on your application, these change events might still be unexpected and cause further issues. 
 See xref:_unexpected_change_events[the following section], before performing these steps.
 ====
 
