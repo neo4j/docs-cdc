@@ -45,14 +45,14 @@ function queryChangesLoop(driver, database, cursor, selectors) {
   }, 500);
 }
 
-function earliestChangeId(driver, database) { // <5>
+function earliestChangeId(driver, database) { // <6>
   return driver.executeQuery('CALL db.cdc.earliest', {}, {database: database})
       .then((res) => {
         return res.records[0].get('id');
       });
 }
 
-function currentChangeId(driver, database) { // <6>
+function currentChangeId(driver, database) { // <7>
   return driver.executeQuery('CALL db.cdc.current', {}, {'database': database})
       .then((res) => {
         return res.records[0].get('id');
@@ -73,12 +73,12 @@ async function main() {
     cursor = await currentChangeId(driver, database);
   }
 
-  const selectors = [ // <7>
+  const selectors = [ // <8>
     // {"select":"n"}
   ];
-  queryChangesLoop(driver, database, cursor, selectors); // <8>
+  queryChangesLoop(driver, database, cursor, selectors); // <9>
 
-  // await driver.close() // <9>
+  // await driver.close() // <10>
 }
 
 main();
