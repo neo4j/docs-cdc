@@ -45,7 +45,7 @@ For more details on transaction log retention and how to configure it, see link:
 
 [WARNING]
 ====
-Restoring your Neo4j database from a backup is likely to cause *loss of data and corrupted data in your CDC application*. 
+Restoring your Neo4j database from a backup is likely to cause *loss of data and corrupted data in your CDC application*.
 Read the following sections carefully if you are using CDC and intend to restore your database from backup.
 ====
 === Loss of change events
@@ -57,8 +57,8 @@ The following steps outline how to mitigate this issue:
 
 [NOTE]
 ====
-The steps outlined here ensure that all change events are transmitted to your CDC application. 
-Depending on your application, these change events might still be unexpected and cause further issues. 
+The steps outlined here ensure that all change events are transmitted to your CDC application.
+Depending on your application, these change events might still be unexpected and cause further issues.
 See xref:_unexpected_change_events[the following section], before performing these steps.
 ====
 
@@ -101,3 +101,9 @@ For example, a `Movie` node in your Neo4j database may have a rating of 5 stars,
 Which could cause the two systems to treat the node differently.
 
 If your CDC application relies on an internal state it is likely required to restore the state of your CDC application as if it was working with a new database with existing data. For details on this process read the xref:_using_cdc_with_existing_databases[relevant section above].
+
+[[data-caveat]]
+== A caveat to CDC
+
+CDC can only capture data changes that pass through the transaction layer and any data creation that avoids this layer can therefore not be captured.
+For example, when importing data with the `neo4j-admin database import` tool, whether full or incremental, data is written directly to the store without sending anything to the transaction logs and therefore, such changes are **not** captured by CDC.
