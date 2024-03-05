@@ -86,11 +86,16 @@ main();
 ----
 <1> This method is called once for each change event. It should be replaced depending on your use case.
 <2> This query fetches the changes from the database.
-<3> The cursor is moved forward to keep it up to date. This may not be necessary in your use case. See xref:getting-started/key-considerations.adoc#cursor-management[Cursor Management] for details.
-<4> Here we call a method once for each change.
-<5> Note that we update the cursor defined outside the anonymous function. `session.executeRead` might re-try the query, re-running the inner anonymous function. In order to avoid re-trying from an already applied cursor position, we need to ensure that further calls to `db.cdc.query` are executed with the new cursor value.
+<3> The cursor is moved forward to keep it up to date. 
+This may not be necessary in your use case. 
+See xref:getting-started/key-considerations.adoc#cursor-management[Cursor Management] for details.
+<4> A function is called once for each change.
+<5> Note that the cursor defined outside the anonymous function is updated. 
+`session.executeRead` might re-try the query, re-running the inner anonymous function. 
+To avoid re-trying from an already applied cursor position, ensure that further calls to `db.cdc.query` are executed with the new cursor value.
 <6> Use this function to get the earliest available change id.
 <7> Use this function to get the current change id.
-<8> Here you can limit the returned changes. The out-commented line would select only node changes and exclude all relationship changes.
+<8> You can limit the returned changes. 
+The out-commented line would select only node changes and exclude all relationship changes.
 <9> We call `queryChanges` repeatedly, using the cursor from the previous call.
 <10> Call `driver.close()` when you want to terminate the loop.
