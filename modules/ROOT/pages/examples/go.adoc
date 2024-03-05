@@ -228,7 +228,7 @@ func main() {
 
 ----
 
-<1> This function is called once for each change event. It should be replaced based on your use case.
+<1> This method is called once for each change.
 <2> This function fetches the changes from the database.
 <3> The cursor is moved forward to keep it up to date. 
 This may not be necessary in your use case. 
@@ -239,5 +239,5 @@ To avoid seeing the same change twice, update the cursor as the changes are appl
 <6> Use this function to get the earliest available change id.
 <7> Use this function to get the current change id.
 <8> The timer is reset so that `queryChanges` gets called repeatedly.
-<9> You can use a filter to receive only the changes you are interested in. 
+<9> The results may be filtered to return a subset of changes.
 The out-commented line would select only node changes that have both `Person` and `Employee` labels.
