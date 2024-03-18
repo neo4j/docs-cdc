@@ -13,7 +13,7 @@ This element ID is not stable through processes that change the underlying datab
 - Copying the database to a new name or location
 - Pausing and resuming the database in Neo4j Aura.
 
-This means that performing any of the listed actions will cause new changes to the same element to be transmitted with a different elementId.
+This means that performing any of the listed actions causes new changes to the same element to be transmitted with a different elementId.
 
 Neo4j recommends that logical / business keys are used to identify elements.
 See xref:getting-started/constraints.adoc#change-data-capture-constraints[Capturing Key Properties] for details on logical / business keys.
