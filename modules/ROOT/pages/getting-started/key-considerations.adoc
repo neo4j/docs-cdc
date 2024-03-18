@@ -42,7 +42,7 @@ For more details on transaction log retention and how to configure it, see link:
 
 [[cursor-management]]
 == Cursor management and server side filtering
-The changeId returned from xref:procedures/earliest.adoc[db.cdc.earliest], xref:procedures/current.adoc[db.cdc.current] and xref:procedures/query.adoc[db.cdc.query] are valid until neo4j performs transaction log rotation as discussed in the previous section.
+The changeId returned from xref:procedures/earliest.adoc[db.cdc.earliest], xref:procedures/current.adoc[db.cdc.current] and xref:procedures/query.adoc[db.cdc.query] are valid until Neo4j performs transaction log rotation as discussed in the previous section.
 
 Usually the cursor stays valid, since each call to `db.cdc.query` updates the cursor.
 
