@@ -1,15 +1,3 @@
 [[known-issues]]
 = Known Issues
 :description: This chapter describes known issues related to CDC.
-
-== Neo4j 5.16
-As of Neo4j 5.16 the CDC feature has the following known issues.
-
-=== Outdated ChangeId with strict selectors
-Neo4j provides an updated changeId with each change returned through xref:procedures/current.adoc[db.cdc.current]. With selectors filtering out certain changes, xref:procedures/current.adoc[db.cdc.current] might not return any changes and therefore no updated changeId. If the changeId is not updated for long enough it will become invalid and Neo4j will throw an error.
-
-==== Mitigations
-- The issue can be avoided by performing all change filtering on the client side instead of using selectors.
-- The issue can be mitigated by ensuring that provided selectors include enough changes within the timeframe dictated by xref:getting-started/key-considerations.adoc#log-retention[transaction log retention] settings to keep the changeId updated.
-
-The API is likely to change during Beta to resolve this issue.
