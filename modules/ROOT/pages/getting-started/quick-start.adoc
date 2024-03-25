@@ -1,0 +1,20 @@
+[quick-start]
+= Quick start
+
+This section introduces a short summary of the steps required to enable and use CDC.
+
+[NOTE]
+====
+It is recommended to read the section about xref:getting-started/security.adoc[] as well as xref:getting-started/key-considerations.adoc[] before proceeding.
+====
+
+== Enable transaction log enrichment on the database
+Follow the instructions in xref:getting-started/enrichment-mode.adoc#modifying_enrichment_mode[Enrichment mode -> Modifying enrichment mode] to set enrichment mode. In Aura, enrichment mode is managed through the Aura Console UI.
+
+Once enrichment mode is set to either `FULL` or `DIFF`, the database is ready to answer CDC queries.
+
+== Client application
+The chapter xref:examples/index.adoc[] contains example code for what a typical CDC application would look like.
+The procedures used in the example are explained in the chapter xref:procedures/index.adoc[].
+
+For advanced use cases the section xref:getting-started/constraints.adoc[] contains details on how to use business keys to identify changes and the section xref:selectors/index.adoc[] explains how the CDC output can be filtered.
