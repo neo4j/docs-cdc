@@ -10,7 +10,7 @@ CDC returns the same element ID as provided by the link:{neo4j-docs-base-uri}/cy
 This element ID is not stable through processes that change the underlying database such as:
 
 - Restoring from backup
-- Copying the database to a new name or location
+- Copying the database to a new name or location.
 - Pausing and resuming the database in Neo4j Aura.
 
 This means that performing any of the listed actions causes new changes to the same element to be transmitted with a different elementId.
