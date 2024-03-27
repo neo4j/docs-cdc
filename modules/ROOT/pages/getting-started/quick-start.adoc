@@ -16,6 +16,5 @@ Once enrichment mode is set to either `FULL` or `DIFF`, the database is ready to
 
 == Client application
 See xref:examples/index.adoc[] for more information on what a typical CDC application would look like and xref:procedures/index.adoc[] for a detailed explanation of the procedures used.
-The procedures used in the example are explained in the chapter xref:procedures/index.adoc[].
 
 See xref:getting-started/constraints.adoc[] for details on how to use business keys to identify changes and  xref:selectors/index.adoc[] for information on how the CDC output can be filtered.
