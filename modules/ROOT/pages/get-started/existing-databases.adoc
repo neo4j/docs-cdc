@@ -1,0 +1,12 @@
+= Using CDC with existing databases
+
+You can enable log enrichment on existing databases in order to be able to track changes.
+However, enabling log enrichment affects only future transactions and existing data will not be surfaced by CDC procedures.
+If your use case requires a snapshot of existing data for CDC purposes, best practice is to;
+
+* Enable log enrichment with one of the desired values
+* Set database to read-only
+* Capture current change identifier
+* Perform a snapshot using an application of your own that reads all nodes and relationships of interest and process those according to your CDC requirements
+* Set database to read-write
+* Run your CDC application starting with the captured change identifier
