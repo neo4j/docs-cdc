@@ -33,6 +33,35 @@ Modifying enrichment mode from `DIFF` to `FULL` or viceversa immediately changes
 Your CDC application must be able to deal with the different format.
 ====
 
+[[get-enrichment-mode]]
+=== Get a database's log enrichment mode
+
+To see what value the enrichment mode of a database is, use the link:https://neo4j.com/docs/operations-manual/current/database-administration/standard-databases/manage-databases/#manage-databases-list[`SHOW DATABASES`] Cypher command.
+
+.Query
+[source, cypher]
+----
+SHOW DATABASES YIELD name, options
+----
+
+
+.Result
+[role="queryresult",options="header,footer",cols="1m,1m"]
+|===
+| name | options
+
+| "neo4j"
+| {"txLogEnrichment": "FULL"}
+
+
+| "system"
+| {}
+
+|===
+
+
+
+
 === Disable log enrichment
 
 To disable log enrichment on a database, either set `txLogEnrichment` explicitly to `OFF` or remove it altogether.

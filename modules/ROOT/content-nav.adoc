@@ -3,7 +3,6 @@
 ** xref:get-started/on-prem.adoc[]
 ** xref:get-started/aura.adoc[]
 ** xref:get-started/elementids-key-properties.adoc[]
-** xref:get-started/existing-databases.adoc[]
 
 * xref:procedures/index.adoc[]
 // TODO maybe have a "previous" here, indicating how to fetch the ID from the previous
@@ -19,6 +18,7 @@
 ** xref:examples/python.adoc[Python]
 
 * xref:backup-restore.adoc[]
+* xref:existing-databases.adoc[]
 
 * xref:troubleshooting.adoc[]
 * xref:known-issues.adoc[]

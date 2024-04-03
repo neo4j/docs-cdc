@@ -31,11 +31,6 @@ Disabling and then re-enabling CDC is equivalent to enabling it for the first ti
 
 == Points to consider
 
-[[security]]
-=== Security
-
-USer access
-
 
 [[log-retention]]
 === Transaction log retention
@@ -43,4 +38,5 @@ USer access
 What's the default log retention period on aura instances?
 
 
+[[pause-resume]]
 === Pause/Resume instances

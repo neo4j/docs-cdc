@@ -6,4 +6,3 @@ This chapter describes the following:
 * xref:get-started/on-prem.adoc[]
 * xref:get-started/aura.adoc[]
 * xref:get-started/elementids-key-properties.adoc[]
-* xref:get-started/existing-databases.adoc[]
