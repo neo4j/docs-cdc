@@ -7,8 +7,8 @@ The following sections outline the issues you may run into if you are using CDC 
 [#unexpected-change-events]
 == Unexpected change events
 When restoring a Neo4j database to a previous snapshot, the changes that have happened since the snapshot was taken are effectively reverted on the database.
-There is no process for letting your CDC application know that these changes "never happened".
-Effectively, your CDC application expects certain changes to have happened that according to your Neo4j database "never happened".
+There is no process for letting your CDC client application know that these changes "never happened".
+Effectively, your CDC client application expects certain changes to have happened that according to your Neo4j database "never happened".
 
 Some examples of problematic scenarios are:
 

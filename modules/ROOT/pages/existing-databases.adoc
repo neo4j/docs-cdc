@@ -3,7 +3,7 @@
 You can enable log enrichment on existing databases, but that will only affect future transactions and existing data will not be surfaced by CDC procedures.
 If your use case requires a snapshot of existing data for CDC purposes, you have to do so manually and without the aid of CDC query procedures.
 
-In particular, the recommended steps are along the lines of:
+In particular, the recommended steps are:
 
 * Enable log enrichment on the database
 * Set database to read-only

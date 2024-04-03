@@ -60,8 +60,6 @@ SHOW DATABASES YIELD name, options
 |===
 
 
-
-
 === Disable log enrichment
 
 To disable log enrichment on a database, either set `txLogEnrichment` explicitly to `OFF` or remove it altogether.
@@ -139,7 +137,7 @@ Actual disk usage depends on the application, data model and transaction charact
 
 Since Neo4j stores change data capture information inside transaction log entries, you should configure the transaction log retention period based on your application requirements.
 
-The number of hours or days to keep transaction logs is highly dependent on your CDC use case, but as a general rule of thumb you can pick the period based on downtime tolerance of your downstream application so that the changes you have not yet processed are not pruned.
+The number of hours or days to keep the transaction log is highly dependent on your CDC use case, but as a general rule of thumb you can pick the period based on downtime tolerance of your downstream application so that the changes you have not yet processed are not pruned.
 
 For more details on transaction log retention and how to configure it, see link:{neo4j-docs-base-uri}/operations-manual/{page-version}/configuration/transaction-logs/#transaction-logging-log-retention[Operations Manual -> Configuration -> Transaction Log].
 
@@ -148,4 +146,4 @@ For more details on transaction log retention and how to configure it, see link:
 === Unrecorded changes
 
 CDC can only capture data changes that pass through the transaction layer and any data creation that avoids this layer can therefore not be captured.
-For example, when importing data with the link:{neo4j-docs-base-uri}/operations-manual/current/tools/neo4j-admin/neo4j-admin-import/[`neo4j-admin database import`] tool, whether full or incremental, or when loading data with the link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/restore-dump/[`neo4j-admin database load`] tool, data is written directly to the store without sending anything to the transaction logs, so such changes are **not** captured by CDC.
+For example, when importing data with the link:{neo4j-docs-base-uri}/operations-manual/current/tools/neo4j-admin/neo4j-admin-import/[`neo4j-admin database import`] tool, whether full or incremental, or when loading data with the link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/restore-dump/[`neo4j-admin database load`] tool, data is written directly to the store without sending anything to the transaction log, so such changes are **not** captured by CDC.
