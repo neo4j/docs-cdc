@@ -1,7 +1,7 @@
 * xref:index.adoc[]
 * xref:get-started/index.adoc[]
 ** xref:get-started/on-prem.adoc[]
-** xref:get-started/aura.adoc[]
+// ** xref:get-started/aura.adoc[]
 ** xref:get-started/elementids-key-properties.adoc[]
 
 * xref:procedures/index.adoc[]
