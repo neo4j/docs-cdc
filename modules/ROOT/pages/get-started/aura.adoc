@@ -43,7 +43,4 @@ USer access
 What's the default log retention period on aura instances?
 
 
-include::partial$get-started.adoc[tags=cursor-management]
-
-
 === Pause/Resume instances
