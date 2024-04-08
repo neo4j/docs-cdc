@@ -108,7 +108,7 @@ CALL db.cdc.query($previousChangeId, [{
 == Selecting entities by key
 Node changes can be filtered to match specified key properties.
 The provided key properties need to fully match to a corresponding node key or relationship key on the entity.
-See xref:get-started/elementids-key-properties.adoc[] for details.
+See xref:procedures/elementids-key-properties.adoc[] for details.
 
 .Query node changes by key
 [source, cypher]

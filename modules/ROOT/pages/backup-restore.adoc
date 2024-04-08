@@ -52,4 +52,4 @@ The following steps outline how to mitigate this issue.
 The elementIds returned by `db.cdc.query` are not guaranteed to be stable across operations that change the database.
 After restoring a backup, new changes to existing elements are published under a new elementId.
 
-It is recommended to use logical/business keys to identify elements instead of elementId, see xref:get-started/elementids-key-properties.adoc[].
+It is recommended to use logical/business keys to identify elements instead of elementId, see xref:procedures/elementids-key-properties.adoc[].

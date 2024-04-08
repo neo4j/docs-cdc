@@ -1,8 +1,0 @@
-= Get Started
-:description: This chapter describes how to configure Neo4j for change data capture.
-
-This chapter describes the following:
-
-* xref:get-started/on-prem.adoc[]
-// * xref:get-started/aura.adoc[]
-* xref:get-started/elementids-key-properties.adoc[]

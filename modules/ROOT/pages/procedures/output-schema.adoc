@@ -82,7 +82,7 @@ See link:{neo4j-docs-base-uri}/operations-manual/{page-version}/clustering/serve
 <14> The metadata associated with the transaction when the operation was performed.
 <15> The link:https://neo4j.com/docs/cypher-manual/5/functions/scalar/#functions-elementid[elementId] of the changed entity (node or relationship).
 <16> The keys identifying the changed entity.
-This requires key constraints defined on the changed entities, see xref:get-started/elementids-key-properties.adoc[] for details.
+This requires key constraints defined on the changed entities, see xref:procedures/elementids-key-properties.adoc[] for details.
 <17> Type of the changed entity: `n` for nodes and `r` for relationships.
 <18> A map describing the state of the entity before the change.
 This field is always `NULL` for create events.
@@ -170,4 +170,4 @@ Only the differences are annotated below.
 <6> Since relationships do not have labels, there is no field for labels in the before / after state.
 <7> Relationship type.
 <8> The keys identifying the changed entity.
-This requires key constraints defined on the changed entities, see xref:get-started/elementids-key-properties.adoc[] for details.
+This requires key constraints defined on the changed entities, see xref:procedures/elementids-key-properties.adoc[] for details.

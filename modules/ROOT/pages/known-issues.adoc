@@ -15,7 +15,7 @@ This elementId is not stable through processes that change the underlying databa
 This means that performing any of the listed actions causes new changes to the same element to be transmitted with a different elementId.
 
 It is recommended that logical / business keys are used to identify elements.
-See xref:get-started/elementid-key-properties[] for details on logical / business keys.
+See xref:procedures/elementids-key-properties.adoc[] for details on logical / business keys.
 
 === Unstable changeId
 The change identifier which CDC uses to track the location in the transaction log has similar issues as the elementId.
