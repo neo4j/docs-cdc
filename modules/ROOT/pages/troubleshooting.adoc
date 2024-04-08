@@ -8,7 +8,7 @@ You can find a list of error codes and causes that are used by change data captu
 === Neo.DatabaseError.ChangeDataCapture.Disabled
 
 Change data capture is currently disabled for this database.
-You need to enable CDC to make use of CDC procedures, see xref:get-started/on-prem.adoc[] and xref:get-started/aura.adoc[].
+You need to enable CDC to make use of CDC procedures, see xref:get-started/on-prem.adoc[].
 
 === Neo.DatabaseError.ChangeDataCapture.ScanFailure
 
