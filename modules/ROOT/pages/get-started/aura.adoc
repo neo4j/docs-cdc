@@ -42,4 +42,5 @@ What's the default log retention period on aura instances?
 [[pause-resume]]
 === Pause/Resume instances
 
-Pause-resume will automatically disable cdc, re enabling invalidates the cursor.
+Pause and resume is currently not recommended for databases with CDC enabled.
+Pausing and resuming a database with CDC enabled, will currently behave similarly to backup and restore operations.
