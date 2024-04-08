@@ -2,13 +2,13 @@
 * xref:get-started/index.adoc[]
 ** xref:get-started/on-prem.adoc[]
 // ** xref:get-started/aura.adoc[]
-** xref:get-started/elementids-key-properties.adoc[]
 
 * xref:procedures/index.adoc[]
 // TODO maybe have a "previous" here, indicating how to fetch the ID from the previous
 ** xref:procedures/selectors.adoc[]
 ** xref:procedures/query-examples.adoc[]
 ** xref:procedures/output-schema.adoc[]
+** xref:procedures/elementids-key-properties.adoc[]
 
 * xref:examples/index.adoc[]
 ** xref:examples/csharp.adoc[C#]
