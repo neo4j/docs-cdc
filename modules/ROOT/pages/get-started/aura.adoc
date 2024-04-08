@@ -7,6 +7,10 @@ include::partial$get-started.adoc[tags=intro]
 [[set-enrichment-mode]]
 == Set the enrichment mode
 
+In the Aura Console, click on the three dots on an instance card, then select “Edit CDC Enrichment Mode”.
+By default, the CDC enrichment mode is set to OFF for all new, cloned, and paused instances, and also for instances that have been restored from a snapshot. 
+Only admins can change the CDC enrichment mode. 
+If CDC enrichment mode is DIFF or FULL, we recommend not pausing the database.
 [IMPORTANT]
 ====
 Modifying enrichment mode from `DIFF` to `FULL` or viceversa immediately changes the  xref:procedures/output-schema.adoc[structure of captured changes].
