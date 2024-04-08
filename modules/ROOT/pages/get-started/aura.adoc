@@ -26,6 +26,12 @@ Disabling and then re-enabling CDC is equivalent to enabling it for the first ti
 
 == Points to consider
 
+=== Design considerations
+
+Applications that use CDC's procedures to query, track their position in the stream of changes using a cursor. 
+This cursor is valid only for a limited time. 
+Therefore, engineers should consider high availability for their applications to ensure that query continuity is maintained in the event of application failure.
+Kubernetes, Apache Kafka, or Confluent can be used to restart the application automatically.
 
 [[log-retention]]
 === Transaction log retention
