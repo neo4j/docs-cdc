@@ -88,38 +88,7 @@ Disabling and then re-enabling CDC is equivalent to enabling it for the first ti
 [[security]]
 === Security
 
-CDC returns all changes in the database and is not limited to the entities which a certain user is allowed to access.
-In order to prevent unauthorized access, the procedure xref:procedures/index.adoc#query[`db.cdc.query`] requires admin privileges and should be configured for least privilege access.
-
-For a regular user to be able to run `db.cdc.query`, the user must have been granted execute privileges as well as boosted execute privileges.
-
-[source, cypher]
-----
-GRANT EXECUTE PROCEDURE db.cdc.query ON DBMS TO $role;
-GRANT EXECUTE BOOSTED PROCEDURE db.cdc.query ON DBMS TO $role;
-----
-
-[NOTE]
-====
-Non-boosted execute privileges are usually part of the `PUBLIC` role, in which case they do not need to be granted a second time.
-====
-
-Furthermore, the user does not have access to a database unless they have been granted access.
-
-[source, cypher]
-----
-GRANT ACCESS ON DATABASE $database TO $role
-----
-
-[NOTE]
-====
-Usually the `PUBLIC` role already has access to the default database.
-====
-
-The procedures xref:procedures/index.adoc#current[`db.cdc.current`] and xref:procedures/index.adoc#earliest[`db.cdc.earliest`] do not require admin privileges. In order to execute these, access to the database and regular execution privileges are sufficient.
-
-For more details regarding procedure privileges in Neo4j, see link:{neo4j-docs-base-uri}/operations-manual/{page-version}/authentication-authorization/manage-execute-permissions[Operations Manual -> Manage procedure and user-defined function permissions].
-
+include::partial$get-started.adoc[tags=security]
 
 [[disk-size]]
 === Disk size

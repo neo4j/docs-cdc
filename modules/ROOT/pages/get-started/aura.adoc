@@ -1,0 +1,50 @@
+= Enable CDC on Aura instances (cloud)
+include::partial$get-started.adoc[tags=intro]
+
+[[set-enrichment-mode]]
+== Set the enrichment mode
+
+Admins can enable CDC for an Aura database instance using the Aura Console UI.
+
+In the Aura Console, click on the three dots on an instance card, then select *Edit CDC Enrichment Mode*.
+
+[IMPORTANT]
+====
+Modifying enrichment mode from `DIFF` to `FULL` or vice-versa immediately changes the  xref:procedures/output-schema.adoc[structure of captured changes].
+Your CDC application must be able to deal with the different formats.
+====
+
+Times when CDC turns OFF
+CDC enrichment mode is set to OFF for:
+
+* New instances
+* Cloned instances
+* Paused instances
+* Instances restored from a snapshot
+
+[[paused-or-resumed-instances]]
+== Paused or resumed instances
+If CDC enrichment mode is DIFF or FULL, we recommend not pausing the database.
+
+When an instance is paused or resumed, it will behave similarly to https://neo4j.com/docs/cdc/current/backup-restore/[backup and restore]
+
+[[points-to-considerations]]
+== Points to consider
+
+=== Design considerations
+Applications that use CDC data, track the CDC data position in the stream of changes using a cursor.
+Engineers should consider the high availability of their applications to ensure that continuity is maintained in the event of application failure. 
+(If a client application breaks down, it needs to be restarted within a specific time frame, otherwise, there will be a gap in CDC changes.
+Kubernetes, Apache Kafka, or Confluent can restart the application automatically.)
+
+[WARNING]
+====
+Disabling enrichment immediately breaks the continuity of change events.
+**Change identifiers generated before disabling can no longer be used and, even if enrichment is re-enabled, the previously-generated change identifiers remain invalid.**
+Disabling and then re-enabling CDC is equivalent to enabling it for the first time: there is no memory of previous changes.
+====
+
+[[security]]
+=== Security
+
+include::partial$get-started.adoc[tags=security]
