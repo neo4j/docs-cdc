@@ -8,6 +8,8 @@ Admins can enable CDC for an Aura database instance using the Aura Console UI.
 
 In the Aura Console, click on the three dots on an instance card, then select *Edit CDC Enrichment Mode*.
 
+Non-admins may view the current enrichment mode, but may not edit it.
+
 [IMPORTANT]
 ====
 Modifying enrichment mode from `DIFF` to `FULL` or vice-versa immediately changes the  xref:procedures/output-schema.adoc[structure of captured changes].
