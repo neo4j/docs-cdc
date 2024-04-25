@@ -29,7 +29,7 @@ CDC enrichment mode is automatically set to OFF for:
 It is possible to pause a database having enrichment mode set to `DIFF` or `FULL`. 
 However, **when the database is resumed, enrichment mode gets set to `OFF`**.
 
-When an instance is paused or resumed, it will behave similarly to https://neo4j.com/docs/cdc/current/backup-restore/[backup and restore]
+When an instance is resumed, it behaves similarly to https://neo4j.com/docs/cdc/current/backup-restore/[restoring a snapshot].
 
 [[points-to-considerations]]
 == Points to consider
