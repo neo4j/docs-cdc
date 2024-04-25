@@ -16,8 +16,7 @@ Modifying enrichment mode from `DIFF` to `FULL` or vice-versa immediately change
 Your CDC application must be able to deal with the different formats.
 ====
 
-=== Times when CDC turns OFF
-CDC enrichment mode is automatically set to OFF for:
+*CDC enrichment mode is automatically set to OFF for:*
 
 * New instances
 * Cloned instances
