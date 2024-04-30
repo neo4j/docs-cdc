@@ -1,4 +1,4 @@
-= Enable CDC on self-hosted instances (on-prem)
+= Enable CDC on self-managed instances
 
 
 include::partial$get-started.adoc[tags=intro]
@@ -14,7 +14,7 @@ To create a new database with CDC enabled, use the link:https://www.neo4j.com/do
 .Query
 [source, cypher]
 ----
-CREATE DATABASE dbName OPTIONS {txLogEnrichment: "FULL"}
+CREATE DATABASE <dbName> IF NOT EXISTS OPTIONS {txLogEnrichment: "FULL"}
 ----
 
 === Modify a database's log enrichment mode
@@ -24,7 +24,7 @@ To tweak the enrichment mode on an existing database, use the https://www.neo4j.
 .Query
 [source, cypher]
 ----
-ALTER DATABASE dbName SET OPTION txLogEnrichment "DIFF"
+ALTER DATABASE <dbName> SET OPTION txLogEnrichment "DIFF"
 ----
 
 [IMPORTANT]
@@ -51,7 +51,7 @@ SHOW DATABASES YIELD name, options
 | name | options
 
 | "neo4j"
-| {"txLogEnrichment": "FULL"}
+| {"txLogEnrichment": "DIFF"}
 
 
 | "system"
@@ -67,13 +67,13 @@ To disable log enrichment on a database, either set `txLogEnrichment` explicitly
 .Using set option clause
 [source, cypher]
 ----
-ALTER DATABASE dbName SET OPTION txLogEnrichment "OFF"
+ALTER DATABASE <dbName> SET OPTION txLogEnrichment "OFF"
 ----
 
 .Using remove option clause
 [source, cypher]
 ----
-ALTER DATABASE dbName REMOVE OPTION txLogEnrichment
+ALTER DATABASE <dbName> REMOVE OPTION txLogEnrichment
 ----
 
 [WARNING]
@@ -106,7 +106,7 @@ Actual disk usage depends on the application, data model and transaction charact
 
 Since Neo4j stores change data capture information inside transaction log entries, you should configure the transaction log retention period based on your application requirements.
 
-The number of hours or days to keep the transaction log is highly dependent on your CDC use case, but as a general rule of thumb you can pick the period based on downtime tolerance of your downstream application so that the changes you have not yet processed are not pruned.
+The number of hours or days to keep the transaction log depends on your CDC use case, but as a general rule of thumb you can pick the period based on downtime tolerance of your downstream application so that the changes you have not yet processed are not pruned.
 
 For more details on transaction log retention and how to configure it, see link:{neo4j-docs-base-uri}/operations-manual/{page-version}/configuration/transaction-logs/#transaction-logging-log-retention[Operations Manual -> Configuration -> Transaction Log].
 
