@@ -31,8 +31,9 @@ Disabling and then re-enabling CDC is equivalent to enabling it for the first ti
 * Instances restored from a snapshot
 
 
-[[key-considerations]
+[[key-considerations]]
 == Key considerations
+
 
 [[pause-resume]]
 === Paused/Resumed databases
