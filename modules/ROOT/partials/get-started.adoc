@@ -6,7 +6,7 @@ For CDC to work, the transaction log need to be _enriched_ with further informat
 This is applied as an extra configuration option to each database.
 As soon as CDC is enabled, the database is ready to answer CDC queries from xref:examples/index.adoc[client applications].
 
-CDC has three _enrichment modes_:
+CDC has three working modes:
 
 - `OFF` -- CDC is disabled (default).
 - `DIFF` -- Changes are captured as the difference between before and after states of each changed entity (i.e. they only contain removals, updates and additions).

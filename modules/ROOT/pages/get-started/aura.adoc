@@ -3,28 +3,27 @@
 include::partial$get-started.adoc[tags=intro]
 
 
-[[set-enrichment-mode]]
-== Set the enrichment mode
+[[toggle-cdc-mode]]
+== Toggle CDC mode
 
-Admin users can enable CDC for an Aura database instance using the Aura Console UI.
-Non-admin users may view the current enrichment mode, but may not edit it.
-
-To enable or tweak the enrichment mode, access the instance options through the three dots on an instance card and select *Edit CDC Enrichment Mode*.
+Admin users can tweak the CDC mode for a database using the Aura instance options.
+To access the seeting, access the instance options through the three dots on the instance card and select *Edit CDC Enrichment Mode*.
+Non-admin users may view the current CDC mode, but may not edit it.
 
 [IMPORTANT]
 ====
-Modifying enrichment mode from `DIFF` to `FULL` or vice-versa immediately changes the  xref:procedures/output-schema.adoc[structure of captured changes].
+Modifying CDC mode from `DIFF` to `FULL` or vice-versa immediately changes the  xref:procedures/output-schema.adoc[structure of captured changes].
 Your CDC application must be able to deal with the change of format.
 ====
 
 [WARNING]
 ====
-Disabling enrichment immediately breaks the continuity of change events.
-**Change identifiers generated before disabling can no longer be used and, even if enrichment is re-enabled, the previously-generated change identifiers remain invalid.**
+Disabling CDC immediately breaks the continuity of change events.
+**Change identifiers generated before disabling can no longer be used and, even if CDC is re-enabled, the previously-generated change identifiers remain invalid.**
 Disabling and then re-enabling CDC is equivalent to enabling it for the first time: there is no memory of previous changes.
 ====
 
-*CDC enrichment mode is automatically set to OFF for:*
+*CDC is automatically disabled for:*
 
 * New instances
 * Cloned instances
@@ -32,11 +31,12 @@ Disabling and then re-enabling CDC is equivalent to enabling it for the first ti
 * Instances restored from a snapshot
 
 
-== Points to consider
+[[key-considerations]
+== Key considerations
 
 [[pause-resume]]
 === Paused/Resumed databases
-Although it is possible to pause a database that has enrichment mode set to `DIFF` or `FULL`, **enrichment mode gets set to `OFF` when the database is resumed**.
+Although it is possible to pause a database that has CDC mode set to `DIFF` or `FULL`, **the CDC mode gets set to `OFF` when the database is resumed**.
 
 When an instance is resumed, it behaves similarly to https://neo4j.com/docs/cdc/current/backup-restore/[restoring a snapshot].
 
