@@ -14,6 +14,7 @@ CDC has three _enrichment modes_:
 
 end::intro[]
 
+
 tag::security[]
 
 CDC returns all changes in the database and is not limited to the entities which a certain user is allowed to access.

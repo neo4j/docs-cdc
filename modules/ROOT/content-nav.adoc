@@ -1,7 +1,7 @@
 * xref:index.adoc[]
 
 * Enable CDC
-** xref:get-started/on-prem.adoc[Self-hosted instances (on-prem)]
+** xref:get-started/self-managed.adoc[Self-hosted instances (on-prem)]
 ** xref:get-started/aura.adoc[Aura instances (cloud)]
 
 * xref:procedures/index.adoc[]
