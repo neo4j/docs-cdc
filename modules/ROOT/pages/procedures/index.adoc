@@ -163,3 +163,32 @@ CALL db.cdc.query("A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABAAAAAAAAAAA")
 |===
 
 ====
+
+
+[[earliest-change-event]]
+== Retrieve the earliest change event
+
+The procedure `db.cdc.earliest` returns the change _identifier_ for the earliest available change, but not the associated change _event_ information.
+To retrieve the earliest change event, you can feed the earliest change ID into `db.cdc.query` and limit the result to one.
+Change events are sorted chronologically so no sorting is needed.
+
+[source, cypher]
+----
+CALL db.cdc.earliest() YIELD id AS earliestId
+CALL db.cdc.query(earliestId) YIELD event, metadata
+RETURN event, metadata LIMIT 1
+----
+
+
+[[latest-change-event]]
+== Retrieve the most recent change event
+
+To retrieve the most recent change event, you can feed the earliest change ID into `db.cdc.query`, reverse-sort them, and limit the result to one.
+This query can be very slow, as it needs to scan through all change events before.
+
+[source, cypher]
+----
+CALL db.cdc.earliest() YIELD id AS earliestId
+CALL db.cdc.query(earliestId) YIELD event, metadata
+RETURN event, metadata ORDER BY metadata.txCommitTime DESC LIMIT 1
+----
