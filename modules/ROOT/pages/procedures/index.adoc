@@ -182,7 +182,6 @@ RETURN event, metadata LIMIT 1
 == Retrieve the most recent change event
 
 To retrieve the most recent change event, you can feed the earliest change ID into `db.cdc.query`, reverse-sort them, and limit the result to one.
-This query can be very slow, as it needs to scan through all change events before.
 
 [source, cypher]
 ----
@@ -190,6 +189,9 @@ CALL db.cdc.earliest() YIELD id AS earliestId
 CALL db.cdc.query(earliestId) YIELD event, metadata
 RETURN event, metadata ORDER BY metadata.txCommitTime DESC LIMIT 1
 ----
+
+[NOTE]
+This query can be very slow, as it needs to scan through all change events.
 
 
 == A minimal working example
