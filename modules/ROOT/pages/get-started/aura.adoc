@@ -1,4 +1,4 @@
-= Enable CDC on Aura instances (cloud)
+= CDC on Aura instances (cloud)
 
 include::partial$get-started.adoc[tags=intro]
 
