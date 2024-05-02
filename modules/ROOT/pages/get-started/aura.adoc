@@ -19,7 +19,7 @@ Your CDC application must be able to deal with the change of format.
 [[disable-cdc]]
 == Disable CDC
 
-Admin users can tweak the CDC mode for a database through the setting  *Edit CDC Mode*, accessible via the Aura instance options.
+Admin users can disable CDC for a database through the setting  *Edit CDC Mode*, accessible via the Aura instance options.
 Set the mode to `OFF`.
 Only admin users can disable CDC mode for a database.
 

@@ -134,8 +134,6 @@ As long as they are all more recent than 1 day, the server keeps _at least_ `2GB
 In case large transactions resulted in log files larger than 256MB, the minimum retained size of logs may be smaller than `2GB - 256MB`.
 ====
 
-
-
 [[non-tx-log-changes]]
 === Unrecorded changes
 
