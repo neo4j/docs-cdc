@@ -198,7 +198,7 @@ The easiest way **to see CDC in action** is by xref:#current[retrieving the curr
 The operations must happen in three separate transactions.
 
 .Transaction 1 -- Retrieve current change ID
-[source, cypher, test-result-skip]
+[source, cypher]
 ----
 CALL db.cdc.current() YIELD id AS currentId
 // currentId = 'BaQswf9NV0b7qicwDdh7vfwAAAAAAAAD83__________AAABjzfm4bM'
