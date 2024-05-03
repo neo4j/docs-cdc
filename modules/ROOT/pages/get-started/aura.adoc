@@ -64,5 +64,5 @@ The amount of disk space reserved for transaction logs is fixed, and logs are ro
 When logs get pruned, your CDC application loses access to the transactions contained in the deleted files.
 Normally this is not an issue, as applications are meant to consume changes in (quasi) real time. Should your CDC application be unavailable for too long a time though, some of the oldest unconsumed changes may have already been pruned by the time it is available again.
 
-xref:procedures.adoc/#earliest-change-event[Retrieving the earliest change event] may help you get a feeling for how far back in time your database's transaction logs are retained, although you should be careful in making assumptions based on that: *the rate at which old transactions are pruned from logs depends on the number and size of incoming transactions*, and is thus likely to oscillate over time.
+xref:procedures/index.adoc#earliest-change-event[Retrieving the earliest change event] may help you get a feeling for how far back in time your database's transaction logs are retained, although you should be careful in making assumptions based on that: *the rate at which old transactions are pruned from logs depends on the number and size of incoming transactions*, and is thus likely to oscillate over time.
 
