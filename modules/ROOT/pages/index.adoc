@@ -18,5 +18,5 @@ The documentation guides you through the process of setting up CDC, configuring 
 [NOTE]
 ====
 Certain metadata such as creation date, creating user and internal IDs cannot be replicated into another Neo4j database using CDC.
-Hosting Neo4j in a link:{neo4j-docs-base-uri}operations-manual/current/clustering/introduction/[cluster] or creating offline copies by leveraging link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/[backups] may be more appropriate when an exact copy is necessary.
+Hosting Neo4j in a link:{neo4j-docs-base-uri}/operations-manual/current/clustering/introduction/[cluster] or creating offline copies by leveraging link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/[backups] may be more appropriate when an exact copy is necessary.
 ====
