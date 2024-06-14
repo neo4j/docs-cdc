@@ -142,15 +142,3 @@ In case large transactions resulted in log files larger than 256MB, the minimum 
 
 CDC can only capture data changes that pass through the transaction layer and any data creation that avoids this layer can therefore not be captured.
 For example, when importing data with the link:{neo4j-docs-base-uri}/operations-manual/current/tools/neo4j-admin/neo4j-admin-import/[`neo4j-admin database import`] tool, whether full or incremental, or when loading data with the link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/restore-dump/[`neo4j-admin database load`] tool, data is written directly to the store without sending anything to the transaction log, so such changes are **not** captured by CDC.
-
-=== Syncing to another Neo4j database
-CDC is a suitable tool for copying all or some data change events from one database to another, as well as building software that reacts to data change events in the database.
-
-However, it is not a suitable tool for creating an exact copy of your Neo4j database.
-Whilst the change event includes metadata about the transaction, it cannot be used to create identical elements in another Neo4j instance.
-Since the downstream database is a different instance, it creates its own IDs and timestamps when the data is transferred.
-The result is two databases that look similar, but have slight inconsistencies.
-
-Fault tolerance can be achieved by hosting Neo4j in a link:{neo4j-docs-base-uri}operations-manual/current/clustering/introduction/[cluster].
-
-Offline copies of databases can be created using link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/[backups].

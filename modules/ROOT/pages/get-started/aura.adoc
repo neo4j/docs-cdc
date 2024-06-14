@@ -66,13 +66,3 @@ When logs get pruned, your CDC application loses access to the transactions cont
 Normally this is not an issue, as applications are meant to consume changes in (quasi) real time. Should your CDC application be unavailable for too long a time though, some of the oldest unconsumed changes may have already been pruned by the time it is available again.
 
 Although xref:procedures/index.adoc#earliest-change-event[retrieving the earliest change event] may help you get a feeling for how far back in time your database's transaction logs are retained, you should be careful in making assumptions based on that: *the rate at which old transactions are pruned from logs depends on the number and size of incoming transactions*, and is thus likely to oscillate over time.
-
-=== Syncing to another Neo4j database
-CDC is a suitable tool for copying all or some data change events from one database to another, as well as building software that reacts to data change events in the database.
-
-However, it is not a suitable tool for creating an exact copy of your Neo4j database.
-Whilst the change event includes metadata about the transaction, it cannot be used to create identical elements in another Neo4j instance.
-Since the downstream database is a different instance, it creates its own IDs and timestamps when the data is transferred.
-The result is two databases that look similar, but have slight inconsistencies.
-
-Offline copies of databases can be created using link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/[backups].
