@@ -3,7 +3,7 @@
 This page lists changes to CDC in different versions of Neo4j.
 
 CDC was first released as beta with Neo4j Enterprise Edition 5.13 and AuraDB Enterprise. +
-It has been out of beta since Neo4j 5.20.
+It has been out of beta since Neo4j 5.23.
 
 
 == Version 5.17
