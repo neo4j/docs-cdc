@@ -1,5 +1,5 @@
 = CDC on Neo4j DBMS
-:page-role: beta enterprise-edition
+:page-role: enterprise-edition
 
 include::partial$get-started.adoc[tags=intro]
 
