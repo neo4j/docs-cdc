@@ -1,5 +1,5 @@
 = CDC on Neo4j Aura
-:page-role: aura-db-enterprise
+:page-role: aura-db-enterprise aura-db-business-critical
 
 include::partial$get-started.adoc[tags=intro]
 
