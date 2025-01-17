@@ -171,3 +171,17 @@ Only the differences are annotated below.
 <7> Relationship type.
 <8> The keys identifying the changed entity.
 This requires key constraints defined on the changed entities, see xref:procedures/elementids-key-properties.adoc[] for details.
+
+== Order of changes
+
+The changes occurring within a transaction are tracked as change events in the following order:
+
+* Node creation
+* Relationship creation
+* Node labels/properties updates
+* Relationship properties updates
+* Node deletions
+* Relationship deletions
+
+Note that the order of changes in the output is **not guaranteed** to match exactly the order of changes occurring in a transaction.
+CDC tracks logical changes only; therefore, if two changes cancel each other (for example, a `DELETE` following a `CREATE` on the same node), none is included in the stream.
