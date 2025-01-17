@@ -175,7 +175,7 @@ This requires key constraints defined on the changed entities, see xref:procedur
 [#order]
 == Order of changes
 
-The changes occurring within a transaction are tracked as change events in the following order:
+The changes from a transaction are tracked as change events in the following order:
 
 * Node creation
 * Relationship creation
@@ -184,6 +184,6 @@ The changes occurring within a transaction are tracked as change events in the f
 * Node deletions
 * Relationship deletions
 
-Note that the order of changes in the output is **not guaranteed** to match exactly the order of changes occurring in a transaction.
+Note that the order of changes in the output is **not guaranteed** to match exactly the order of changes occurring in the transaction.
 
-CDC tracks logical changes only; therefore, if two changes cancel each other (for example, a `DELETE` following a `CREATE` on the same node), none is included in the stream.
+CDC tracks logical changes only; therefore, if two or more changes cancel each other (for example, a `DELETE` following a `CREATE` on the same node), none is included in the change stream.
