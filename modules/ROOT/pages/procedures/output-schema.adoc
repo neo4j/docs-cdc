@@ -66,7 +66,7 @@ It can be used to query changes from this change onward.
 <2> A number identifying which transaction the change happened in, unique in combination with `seq`.
 Transaction identifiers are not continuous (some transactions, such as system and schema commands, are not recorded in change data capture and cause gaps in the transaction identifiers).
 <3> A number used for ordering changes that happened in the same transaction.
-The order of changes observed in the output does not necessarily correspond to the order in which changes were applied during the transaction.
+The order of changes observed in the output does not necessarily correspond to the order in which changes were applied during the transaction (see <<order>>).
 <4> The user that performed this change.
 May be different from `authenticatedUser` when using link:https://neo4j.com/docs/operations-manual/current/authentication-authorization/dbms-administration/#access-control-dbms-administration-impersonation[impersonation].
 <5> The authenticated user when this change was performed.
@@ -171,3 +171,19 @@ Only the differences are annotated below.
 <7> Relationship type.
 <8> The keys identifying the changed entity.
 This requires key constraints defined on the changed entities, see xref:procedures/elementids-key-properties.adoc[] for details.
+
+[#order]
+== Order of changes
+
+The order of changes in the output is **not guaranteed** to match exactly the order of changes occurring in a transaction.
+
+The change events are tracked in the following order:
+
+* Node creations
+* Relationship creations
+* Node labels/properties updates
+* Relationship properties updates
+* Node deletions
+* Relationship deletions
+
+CDC tracks actual changes only: if two or more changes cancel each other out (for example, a `DELETE` following a `CREATE` on the same node), none is included in the change stream.
