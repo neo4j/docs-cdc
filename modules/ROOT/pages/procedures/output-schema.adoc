@@ -186,4 +186,4 @@ The change events are tracked in the following order:
 * Node deletions
 * Relationship deletions
 
-CDC tracks logical changes only: if two or more changes cancel each other out (for example, a `DELETE` following a `CREATE` on the same node), none is included in the change stream.
+CDC tracks actual changes only: if two or more changes cancel each other out (for example, a `DELETE` following a `CREATE` on the same node), none is included in the change stream.
