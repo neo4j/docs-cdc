@@ -5,7 +5,6 @@
 ** xref:get-started/aura.adoc[Neo4j Aura]
 
 * xref:procedures/index.adoc[]
-// TODO maybe have a "previous" here, indicating how to fetch the ID from the previous
 ** xref:procedures/selectors.adoc[]
 ** xref:procedures/query-examples.adoc[]
 ** xref:procedures/output-schema.adoc[]
@@ -20,6 +19,7 @@
 
 * xref:backup-restore.adoc[]
 * xref:existing-databases.adoc[]
+* xref:disaster-recovery.adoc[]
 
 * xref:troubleshooting.adoc[]
 * xref:known-issues.adoc[]

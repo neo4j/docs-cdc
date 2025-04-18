@@ -1,0 +1,95 @@
+= Disaster recovery
+
+This page explains how to recover from a situation in which:
+
+- your server has failed, and needs to be restored from backups;
+- a CDC client application was running and processing changes when the server failed, and it may have missed some change events before the server became unavailable.
+
+The rest of the page covers the prerequisites that your setup must fulfill for you to be able to recover from a disaster, and the steps you need to take to recover.
+Use this page both to set yourself up to be prepared to face disasters, and to recover from them should they occurr.
+
+[WARNING]
+====
+The recovery procedure works both on single instances and on clusters since Neo4j 2024.04.
+It does not work on clusters on earlier versions.
+
+The exact constraint for clusters is that the recovery should happen onto a cluster running Neo4j 2024.04 or later, and the differential backups _after aggregation_ come from Neo4j 2024.04 or later. Earlier backups in the chain could have been exported under earlier versions. (CONFIRM)
+====
+
+
+== Setup prerequisites
+
+- You have incremental backups of the failed database. For example, you could have a scheduled job that runs a backup every hour.
+`neo4j-admin database backup --to-path=backups/neo4j neo4j`
+- The xref:get-started/self-managed.adoc#log-retention[transaction log retention period] is smaller than the interval between backups.
+- The database to restore was running with xref:get-started/self-managed.adoc[txLogEnrichment] set to either `FULL` or `DIFF`.
+- You keep track of the change event that your CDC application has processed last (specifically, the event ID and the field `txCommitTime`).
+
+
+== Recovery steps
+
+To be able to recover from a disaster, you need database backups and the information on the CDC event that was last processed.
+
+As a concrete example for the recovery procedure, suppose the backup directory contains the following files:
+
+.Backup directory
+[source, bash]
+----
+root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
+-rw-r--r-- 1 root root  1355 Apr 18 06:36 neo4j-2025-04-18T06-36-12.backup
+-rw-r--r-- 1 root root  1291 Apr 18 06:56 neo4j-2025-04-18T06-56-36.backup
+-rw-r--r-- 1 root root  1012 Apr 18 06:57 neo4j-2025-04-18T06-57-21.backup
+-rw-r--r-- 1 root root  1185 Apr 18 06:57 neo4j-2025-04-18T06-57-30.backup
+-rw-r--r-- 1 root root  1704 Apr 18 06:59 neo4j-2025-04-18T06-59-12.backup
+-rw-r--r-- 1 root root  1688 Apr 18 06:59 neo4j-2025-04-18T06-59-41.backup
+-rw-r--r-- 1 root root  1680 Apr 18 06:59 neo4j-2025-04-18T06-59-52.backup
+----
+
+and that the latest processed change event has ID `EWcd7MhuWPmkAAAAAAAACM9\__________wAAAZZHsCvl` and a `txCommitTime` of `2025-04-18T06:57:30.055000000Z`.
+
+
+=== Stop CDC application
+
+You are going to recreate the database and import the backups into it, so your CDC application should not be processing changes until the database is ready.
+Stop it until it's time.
+
+
+=== Aggregate backups
+
+[NOTE]
+This step is optional, but is also recommended out of disaster situations, to keep the size and number of backup files under control.
+
+To reduce the time it takes to restore the backup, you can link:https://neo4j.com/docs/operations-manual/current/backup-restore/aggregate/[aggregate] together a number of incremental backup files.
+Aggregate backup files up until the latest date _before_ the latest CDC `txCommitTime` processed event.
+
+In the example situation, we can aggregate backups until `2025-04-18T06:57:30`. Because the backup files lack microsecond precisions, we aggregate until the previous file (`2025-04-18T06-57-21`) to be on the safe side.
+
+.Backup aggregation
+[source,bash]
+----
+root@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=backups/neo4j/neo4j-2025-04-18T06-57-21.backup
+Successfully aggregated backup chain of database 'neo4j', new artifact: '/var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup'.
+----
+
+.Backup directory after aggregation
+[source,bash]
+----
+root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
+-rw-r--r-- 1 root root  1185 Apr 18 06:57 neo4j-2025-04-18T06-57-30.backup
+-rw-r--r-- 1 root root  1704 Apr 18 06:59 neo4j-2025-04-18T06-59-12.backup
+-rw-r--r-- 1 root root  1688 Apr 18 06:59 neo4j-2025-04-18T06-59-41.backup
+-rw-r--r-- 1 root root  1680 Apr 18 06:59 neo4j-2025-04-18T06-59-52.backup
+-rw-r--r-- 1 root root 38769 Apr 18 07:08 neo4j-2025-04-18T07-08-09.backup
+----
+
+status: db fails, you have (incremental) backups from which to restore, your cdc app is x hours behind (you have the latest processed change ID and tx time).
+
+steps:
+
+1. stop cdc app and database
+2. aggregate backups up until a date prior to the latest CDC-processed tx.
+3. recreate db
+4. restore full backup resulting from prev point
+5. start cdc app, query changes from latest processed change id
+6. import subsequent incremental backups
+7. query cdc
