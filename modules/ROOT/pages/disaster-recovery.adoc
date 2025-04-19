@@ -33,10 +33,10 @@ To be able to recover from a disaster, you need database backups and the informa
 As a concrete example for the recovery procedure, suppose the backup directory contains the following files:
 
 .Backup directory
-[source, bash]
+[source,shell]
 ----
 root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
--rw-r--r-- 1 root root  1355 Apr 18 06:36 neo4j-2025-04-18T06-36-12.backup
+-rw-r--r-- 1 root root 37155 Apr 18 06:36 neo4j-2025-04-18T06-36-12.backup
 -rw-r--r-- 1 root root  1291 Apr 18 06:56 neo4j-2025-04-18T06-56-36.backup
 -rw-r--r-- 1 root root  1012 Apr 18 06:57 neo4j-2025-04-18T06-57-21.backup
 -rw-r--r-- 1 root root  1185 Apr 18 06:57 neo4j-2025-04-18T06-57-30.backup
@@ -65,14 +65,14 @@ Aggregate backup files up until the latest date _before_ the latest CDC `txCommi
 In the example situation, we can aggregate backups until `2025-04-18T06:57:30`. Because the backup files lack microsecond precisions, we aggregate until the previous file (`2025-04-18T06-57-21`) to be on the safe side.
 
 .Backup aggregation
-[source,bash]
+[source,shell]
 ----
 root@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=backups/neo4j/neo4j-2025-04-18T06-57-21.backup
 Successfully aggregated backup chain of database 'neo4j', new artifact: '/var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup'.
 ----
 
 .Backup directory after aggregation
-[source,bash]
+[source,shell]
 ----
 root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
 -rw-r--r-- 1 root root  1185 Apr 18 06:57 neo4j-2025-04-18T06-57-30.backup
@@ -82,14 +82,44 @@ root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
 -rw-r--r-- 1 root root 38769 Apr 18 07:08 neo4j-2025-04-18T07-08-09.backup
 ----
 
-status: db fails, you have (incremental) backups from which to restore, your cdc app is x hours behind (you have the latest processed change ID and tx time).
 
-steps:
+=== Recreate the database and restore backup
 
-1. stop cdc app and database
-2. aggregate backups up until a date prior to the latest CDC-processed tx.
-3. recreate db
-4. restore full backup resulting from prev point
-5. start cdc app, query changes from latest processed change id
-6. import subsequent incremental backups
-7. query cdc
+You can recreate the database and import the aggregated backup with a single `CREATE DATABASE` call, using the backup as seed.
+
+[source,cypher]
+----
+CREATE DATABASE neo4j
+OPTIONS {
+    txLogEnrichment: 'DIFF',  // <.>
+    seedURI: 'file:backups/neo4j/neo4j-2025-04-18T07-08-09.backup'  // <.>
+}
+----
+
+<.> The new database should have the same xref:get-started/self-managed.adoc[transaction log enrichment mode] as the backupped database.
+<.> File stored in remote cloud buckets can be accessed without further configuration, whereas `file`, `http(s?)`, and `ftp` require configuration. For more information, see link:https://neo4j.com/docs/operations-manual/current/database-administration/standard-databases/seed-from-uri/#neo4j-seed-providers[Seed providers in Neo4j].
+
+
+=== Restore incremental backups and restart CDC application
+
+Once the database is running and it contains data until _before_ the latest CDC processed event, you can:
+
+1. restore the next (incremental) backup file in the chain;
+2. xref:procedures/index.adoc#query[query for changes] from the latest processed event ID;
+3. repeat the previous steps until you run out of backup files.
+
+For example, the first un-restored backup is `neo4j-2025-04-18T06-57-30.backup`, so we start by restoring that.
+We can then query for CDC changes happened after the event ID we recorded before the database went offline.
+
+[source,shell]
+----
+neo4j-admin database restore --from-path=backups/neo4j/neo4j-2025-04-18T06-57-30.backup --restore-until="2025-04-18 06:57:30" neo4j
+----
+
+[source,cypher]
+----
+CALL db.cdc.query('EWcd7MhuWPmkAAAAAAAACM9__________wAAAZZHsCvl') YIELD id, event, metadata
+RETURN id, event, metadata
+----
+
+After restoring each backup, keep track of the latest processed change ID (via xref:procedures/index.adoc#current[`db.cdc.current()`]) and use it to query for changes after importing the next backup.
