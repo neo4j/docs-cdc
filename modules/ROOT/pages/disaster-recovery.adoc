@@ -3,7 +3,7 @@
 This page explains how to recover from a situation in which:
 
 - your server has failed, and needs to be restored from backups;
-- a CDC client application was running and processing changes when the server failed, and it may have missed some change events before the server became unavailable.
+- a CDC client application was running and processing changes when the server failed, and it may have missed some changes triggered by committed transactions before the server became unavailable.
 
 The rest of the page covers the prerequisites that your setup must fulfill for you to be able to recover from a disaster, and the steps you need to take to recover.
 Use this page both to set yourself up to be prepared to face disasters, and to recover from them should they occurr.
@@ -11,25 +11,24 @@ Use this page both to set yourself up to be prepared to face disasters, and to r
 [WARNING]
 ====
 The recovery procedure works both on single instances and on clusters since Neo4j 2024.04.
-It does not work on clusters on earlier versions.
+It does not work on clusters running versions earlier than 2024.04.
 
-The exact constraint for clusters is that the recovery should happen onto a cluster running Neo4j 2024.04 or later, and the differential backups _after aggregation_ come from Neo4j 2024.04 or later. Earlier backups in the chain could have been exported under earlier versions. (CONFIRM)
+The exact constraint for clusters is that the recovery should happen onto a cluster running Neo4j 2024.04 or later, and the differential backups _after aggregation_ come from Neo4j 2024.04 or later.
+Earlier backups in the chain could have been exported under earlier versions. (CONFIRM)
 ====
 
 
 == Setup prerequisites
 
-- You have incremental backups of the failed database. For example, you could have a scheduled job that runs a backup every hour.
-`neo4j-admin database backup --to-path=backups/neo4j neo4j`
+- You have link:https://neo4j.com/docs/operations-manual/current/backup-restore/online-backup/#online-backup-example[incremental backups] of the failed database. For example, you could have a scheduled job that takes a backup every hour.
 - The xref:get-started/self-managed.adoc#log-retention[transaction log retention period] is smaller than the interval between backups.
-- The database to restore was running with xref:get-started/self-managed.adoc[txLogEnrichment] set to either `FULL` or `DIFF`.
+- The database to restore was running with xref:get-started/self-managed.adoc[`txLogEnrichment`] set to either `FULL` or `DIFF`.
 - You keep track of the change event that your CDC application has processed last (specifically, the event ID and the field `txCommitTime`).
 
 
 == Recovery steps
 
 To be able to recover from a disaster, you need database backups and the information on the CDC event that was last processed.
-
 As a concrete example for the recovery procedure, suppose the backup directory contains the following files:
 
 .Backup directory
@@ -92,7 +91,7 @@ You can recreate the database and import the aggregated backup with a single `CR
 CREATE DATABASE neo4j
 OPTIONS {
     txLogEnrichment: 'DIFF',  // <.>
-    seedURI: 'file:backups/neo4j/neo4j-2025-04-18T07-08-09.backup'  // <.>
+    seedURI: 'file:/var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup'  // <.>
 }
 ----
 
@@ -108,7 +107,7 @@ Once the database is running and it contains data until _before_ the latest CDC 
 2. xref:procedures/index.adoc#query[query for changes] from the latest processed event ID;
 3. repeat the previous steps until you run out of backup files.
 
-For example, the first un-restored backup is `neo4j-2025-04-18T06-57-30.backup`, so we start by restoring that.
+In the example, the first un-restored backup is `neo4j-2025-04-18T06-57-30.backup`, so we start by restoring that.
 We can then query for CDC changes happened after the event ID we recorded before the database went offline.
 
 [source,shell]
