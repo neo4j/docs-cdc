@@ -13,11 +13,12 @@ Use this page both to set yourself up to be prepared to face disasters, and to r
 The recovery procedure works both on single instances and on clusters since Neo4j 2024.04.
 It does not work on clusters running versions earlier than 2024.04.
 
-The exact constraint for clusters is that the recovery should happen onto a cluster running Neo4j 2024.04 or later, and the differential backups _after aggregation_ come from Neo4j 2024.04 or later.
+The exact constraint for clusters is that the recovery should happen onto a cluster running Neo4j 2024.04 or later, and the differential backups _after xref:#aggregate[aggregation]_ come from Neo4j 2024.04 or later.
 Earlier backups in the chain could have been exported under earlier versions. (CONFIRM)
 ====
 
 
+[#prerequisites]
 == Setup prerequisites
 
 - You have link:https://neo4j.com/docs/operations-manual/current/backup-restore/online-backup/#online-backup-example[incremental backups] of the failed database. For example, you could have a scheduled job that takes a backup every hour.
@@ -26,6 +27,7 @@ Earlier backups in the chain could have been exported under earlier versions. (C
 - You keep track of the change event that your CDC application has processed last (specifically, the event ID and the field `txCommitTime`).
 
 
+[#recovery-steps]
 == Recovery steps
 
 To be able to recover from a disaster, you need database backups and the information on the CDC event that was last processed.
@@ -47,16 +49,15 @@ root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
 and that the latest processed change event has ID `EWcd7MhuWPmkAAAAAAAACM9\__________wAAAZZHsCvl` and a `txCommitTime` of `2025-04-18T06:57:30.055000000Z`.
 
 
+[#stop-cdc]
 === Stop CDC application
 
 You are going to recreate the database and import the backups into it, so your CDC application should not be processing changes until the database is ready.
 Stop it until it's time.
 
 
+[#aggregate]
 === Aggregate backups
-
-[NOTE]
-This step is optional, but is also recommended out of disaster situations, to keep the size and number of backup files under control.
 
 To reduce the time it takes to restore the backup, you can link:https://neo4j.com/docs/operations-manual/current/backup-restore/aggregate/[aggregate] together a number of incremental backup files.
 Aggregate backup files up until the latest date _before_ the latest CDC `txCommitTime` processed event.
@@ -82,6 +83,7 @@ root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
 ----
 
 
+[#recreate-db-restore]
 === Recreate the database and restore backup
 
 You can recreate the database and import the aggregated backup with a single `CREATE DATABASE` call, using the backup as seed.
@@ -99,6 +101,7 @@ OPTIONS {
 <.> File stored in remote cloud buckets can be accessed without further configuration, whereas `file`, `http(s?)`, and `ftp` require configuration. For more information, see link:https://neo4j.com/docs/operations-manual/current/database-administration/standard-databases/seed-from-uri/#neo4j-seed-providers[Seed providers in Neo4j].
 
 
+[#restore-incremental]
 === Restore incremental backups and restart CDC application
 
 Once the database is running and it contains data until _before_ the latest CDC processed event, you can:
