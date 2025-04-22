@@ -88,7 +88,7 @@ root@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
 
 You can recreate the database and import the aggregated backup with a single `CREATE DATABASE` call, using the backup as seed.
 
-[source,cypher]
+[source,cypher,test-skip]
 ----
 CREATE DATABASE neo4j
 OPTIONS {
@@ -118,7 +118,7 @@ We can then query for CDC changes happened after the event ID we recorded before
 neo4j-admin database restore --from-path=backups/neo4j/neo4j-2025-04-18T06-57-30.backup --restore-until="2025-04-18 06:57:30" neo4j
 ----
 
-[source,cypher]
+[source,cypher,test-skip]
 ----
 CALL db.cdc.query('EWcd7MhuWPmkAAAAAAAACM9__________wAAAZZHsCvl') YIELD id, event, metadata
 RETURN id, event, metadata
