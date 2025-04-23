@@ -106,7 +106,7 @@ OPTIONS {
 
 Once the database is running and it contains data until _before_ the latest CDC processed event, you can:
 
-1. restore the next (incremental) backup file in the chain;
+1. xref:https://neo4j.com/docs/operations-manual/current/backup-restore/restore-backup/#_restore_data_up_to_a_specific_date[restore the next (incremental) backup file] in the chain;
 2. xref:procedures/index.adoc#query[query for changes] from the latest processed event ID;
 3. repeat the previous steps until you run out of backup files.
 
@@ -115,7 +115,7 @@ We can then query for CDC changes happened after the event ID we recorded before
 
 [source,shell]
 ----
-neo4j-admin database restore --from-path=backups/neo4j/neo4j-2025-04-18T06-57-30.backup --restore-until="2025-04-18 06:57:30" neo4j
+neo4j-admin database restore --from-path=backups/neo4j/ --restore-until="2025-04-18 06:57:30" neo4j
 ----
 
 [source,cypher,test-skip]
