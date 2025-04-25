@@ -53,15 +53,18 @@ You can regularly aggregate files in a way such that the remaining differential 
 For example, if the retention policy is set to `1TB 7-days`, you can aggregate differential backups when their collective size grows larger than 1TB, or when they span more than 7 days worth of transactions.
 
 Another way of looking at it is to aggregate backup files up until the latest transaction _before_ the `txId` of the latest CDC-processed event.
-In the example situation, we can aggregate backups until the transaction with ID `2254`.
-Because transaction `2254` is contained within `neo4j-2025-04-18T06-59-12.backup`, which also contains other unprocessed transactions`, it is safe to aggregate up until the file before.
+In the example situation, we can aggregate backups until the transaction with ID `2254`, which is contained in the file `neo4j-2025-04-18T06-59-12.backup`.
+However, because that file also contains other unprocessed transactions, it is safe to aggregate only up to the file _before_.
 
 .Backup aggregation
 [source,shell]
 ----
-neo4j@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=backups/neo4j/
+neo4j@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=backups/neo4j/  # <.>
 Successfully aggregated backup chain of database 'neo4j', new artifact: '/var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup'.
 ----
+
+<.> Note that you cannot specify a timestamp until which to aggregate; you can only provide a directory. +
+To retain the un-aggregated files, add `--keep-old-backup=true`.
 
 .Backup files details via `neo4j-admin backup inspect`
 [source,shell]
