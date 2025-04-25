@@ -59,12 +59,11 @@ However, because that file also contains other unprocessed transactions, it is s
 .Backup aggregation
 [source,shell]
 ----
-neo4j@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=backups/neo4j/  # <.>
+neo4j@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=backups/neo4j/neo4j-2025-04-18T06-57-30.backup  # <.>
 Successfully aggregated backup chain of database 'neo4j', new artifact: '/var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup'.
 ----
 
-<.> Note that you cannot specify a timestamp until which to aggregate; you can only provide a directory. +
-To retain the un-aggregated files, add `--keep-old-backup=true`.
+<.> To retain the un-aggregated files, add `--keep-old-backup=true`.
 
 .Backup files details via `neo4j-admin backup inspect`
 [source,shell]
