@@ -83,13 +83,6 @@ neo4j@1542efb67d3d:~$ neo4j-admin backup inspect --show-metadata backups/neo4j/
 To be able to recover from a disaster, you need database backups and the information on the CDC event that was last processed.
 
 
-[#stop-cdc]
-=== Stop CDC application
-
-You are going to recreate the database and import the backups into it, so your CDC application should not be processing changes until the database is ready.
-Stop it until it's time.
-
-
 [#recreate-db-restore]
 === Recreate the database and restore backup
 
