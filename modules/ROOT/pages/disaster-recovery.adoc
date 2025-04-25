@@ -24,17 +24,18 @@ The recovery procedure works on Neo4j instances running version 2025.04 or later
 
 As a concrete example for the recovery procedure, suppose the backup directory contains the following files:
 
-.Backup directory
+.Backup files details via `neo4j-admin backup inspect`
 [source,shell]
 ----
-neo4j@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
--rw-r--r-- 1 root root 37155 Apr 18 06:36 neo4j-2025-04-18T06-36-12.backup
--rw-r--r-- 1 root root  1291 Apr 18 06:56 neo4j-2025-04-18T06-56-36.backup
--rw-r--r-- 1 root root  1012 Apr 18 06:57 neo4j-2025-04-18T06-57-21.backup
--rw-r--r-- 1 root root  1185 Apr 18 06:57 neo4j-2025-04-18T06-57-30.backup
--rw-r--r-- 1 root root  1704 Apr 18 06:59 neo4j-2025-04-18T06-59-12.backup
--rw-r--r-- 1 root root  1688 Apr 18 06:59 neo4j-2025-04-18T06-59-41.backup
--rw-r--r-- 1 root root  1680 Apr 18 06:59 neo4j-2025-04-18T06-59-52.backup
+neo4j@1542efb67d3d:~$ neo4j-admin backup inspect --show-metadata backups/neo4j/
+|                                                                 FILE | DATABASE |                          DATABASE ID |          TIME (UTC) |  FULL | COMPRESSED | LOWEST TX | HIGHEST TX | STORE ID HASH |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-52.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2257 |       2257 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-41.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:41 | false |       true |      2256 |       2256 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-12.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:12 | false |       true |      2254 |       2255 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-57-30.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2249 |       2253 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-57-21.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2247 |       2248 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-56-36.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2246 |       2246 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-36-12.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |         1 |       2245 |    1038986389 |
 ----
 
 and that the latest change your application processed has ID `EWcd7MhuWPmkAAAAAAAACM9\__________wAAAZZHsCvl` and a `txId` of `2254`.
@@ -53,6 +54,7 @@ For example, if the retention policy is set to `1TB 7-days`, you can aggregate d
 
 Another way of looking at it is to aggregate backup files up until the latest transaction _before_ the `txId` of the latest CDC-processed event.
 In the example situation, we can aggregate backups until the transaction with ID `2254`.
+Because transaction `2254` is contained within `neo4j-2025-04-18T06-59-12.backup`, which also contains other unprocessed transactions`, it is safe to aggregate up until the file before.
 
 .Backup aggregation
 [source,shell]
@@ -61,25 +63,15 @@ neo4j@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=back
 Successfully aggregated backup chain of database 'neo4j', new artifact: '/var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup'.
 ----
 
-.Backup directory after aggregation
-[source,shell]
-----
-neo4j@737154f61ca4:/var/lib/neo4j# ls -l backups/neo4j/
--rw-r--r-- 1 root root  1704 Apr 18 06:59 neo4j-2025-04-18T06-59-12.backup
--rw-r--r-- 1 root root  1688 Apr 18 06:59 neo4j-2025-04-18T06-59-41.backup
--rw-r--r-- 1 root root  1680 Apr 18 06:59 neo4j-2025-04-18T06-59-52.backup
--rw-r--r-- 1 root root 38769 Apr 18 07:08 neo4j-2025-04-18T07-08-09.backup
-----
-
-.Backup status inspect via `neo4j-admin backup inspect`
+.Backup files details via `neo4j-admin backup inspect`
 [source,shell]
 ----
 neo4j@1542efb67d3d:~$ neo4j-admin backup inspect --show-metadata backups/neo4j/
 |                                                                 FILE | DATABASE |                          DATABASE ID |          TIME (UTC) |  FULL | COMPRESSED | LOWEST TX | HIGHEST TX | STORE ID HASH |
 | file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-52.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2257 |       2257 |    1038986389 |
 | file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-41.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:41 | false |       true |      2256 |       2256 |    1038986389 |
-| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-12.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:12 | false |       true |      2255 |       2255 |    1038986389 |
-| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T07:08:09 |  true |       true |         1 |       2254 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-12.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:12 | false |       true |      2254 |       2255 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T07:08:09 |  true |       true |         1 |       2253 |    1038986389 |
 ----
 
 
