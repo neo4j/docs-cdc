@@ -1,0 +1,118 @@
+= Disaster recovery
+
+This page explains how to recover from a situation in which:
+
+- your server has failed, and needs to be restored from backups;
+- a CDC client application was running and processing changes when the server failed, and it may have missed some changes triggered by committed transactions before the server became unavailable.
+
+The rest of the page covers the prerequisites that your setup must fulfill for you to be able to recover from a disaster, and the steps you need to take to recover.
+Use this page both to set yourself up to be prepared to face disasters, and to recover from them should they occurr.
+
+[WARNING]
+====
+The recovery procedure works on Neo4j instances running version 2025.04 or later, and with backups taken with version 2025.04 or later.
+====
+
+
+[#prerequisites]
+== Setup prerequisites
+
+- You have link:https://neo4j.com/docs/operations-manual/current/backup-restore/online-backup/#online-backup-example[incremental backups] of the failed database. For example, you could have a scheduled job that takes a backup every hour.
+- The xref:get-started/self-managed.adoc#log-retention[transaction log retention policy] is generous enough to accommodate the maximum amount of transactions your CDC application may be behind of.
+- The database to restore was running with xref:get-started/self-managed.adoc[`txLogEnrichment`] set to either `FULL` or `DIFF`.
+- You keep track of the change event that your CDC application has processed last (specifically, the event ID and the transaction ID).
+
+As a concrete example for the recovery procedure, suppose the backup directory contains the following files:
+
+.Backup files details via `neo4j-admin backup inspect`
+[source,shell]
+----
+neo4j@1542efb67d3d:~$ neo4j-admin backup inspect --show-metadata backups/neo4j/
+|                                                                 FILE | DATABASE |                          DATABASE ID |          TIME (UTC) |  FULL | COMPRESSED | LOWEST TX | HIGHEST TX | STORE ID HASH |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-52.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2257 |       2257 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-41.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:41 | false |       true |      2256 |       2256 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-12.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:12 | false |       true |      2254 |       2255 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-57-30.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2249 |       2253 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-57-21.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2247 |       2248 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-56-36.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2246 |       2246 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-36-12.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |         1 |       2245 |    1038986389 |
+----
+
+and that the latest change your application processed has ID `EWcd7MhuWPmkAAAAAAAACM9\__________wAAAZZHsCvl` and a `txId` of `2254`.
+
+
+[#aggregate]
+=== Aggregate backups
+
+[NOTE]
+This step is optional, but recommended as part of your periodic backup workflow to save storage in the backup directory.
+
+To reduce the time it takes to restore the backup, you can aggregate together a number of incremental backup files with the command link:https://neo4j.com/docs/operations-manual/current/backup-restore/aggregate/[`neo4j-admin backup aggregate`].
+
+You can regularly aggregate files in a way such that the remaining differential backups are not larger in size/period than the transaction log retention policy.
+For example, if the retention policy is set to `1TB 7-days`, you can aggregate differential backups when their collective size grows larger than 1TB, or when they span more than 7 days worth of transactions.
+
+Another way of looking at it is to aggregate backup files up until the latest transaction _before_ the `txId` of the latest CDC-processed event.
+In the example situation, we can aggregate backups until the transaction with ID `2254`, which is contained in the file `neo4j-2025-04-18T06-59-12.backup`.
+However, because that file also contains other unprocessed transactions, it is safe to aggregate only up to the file _before_.
+
+.Backup aggregation
+[source,shell]
+----
+neo4j@737154f61ca4:/var/lib/neo4j# neo4j-admin backup aggregate --from-path=backups/neo4j/neo4j-2025-04-18T06-57-30.backup  # <.>
+Successfully aggregated backup chain of database 'neo4j', new artifact: '/var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup'.
+----
+
+<.> To retain the un-aggregated files, add `--keep-old-backup=true`.
+
+.Backup files details via `neo4j-admin backup inspect`
+[source,shell]
+----
+neo4j@1542efb67d3d:~$ neo4j-admin backup inspect --show-metadata backups/neo4j/
+|                                                                 FILE | DATABASE |                          DATABASE ID |          TIME (UTC) |  FULL | COMPRESSED | LOWEST TX | HIGHEST TX | STORE ID HASH |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-52.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:52 | false |       true |      2257 |       2257 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-41.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:41 | false |       true |      2256 |       2256 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T06-59-12.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T06:59:12 | false |       true |      2254 |       2255 |    1038986389 |
+| file:///var/lib/neo4j/backups/neo4j/neo4j-2025-04-18T07-08-09.backup |    neo4j | 5aac7278-969b-4abc-bfa2-aab878e7993e | 2025-04-18T07:08:09 |  true |       true |         1 |       2253 |    1038986389 |
+----
+
+
+[#recovery-steps]
+== Recovery steps
+
+To be able to recover from a disaster, you need database backups and the information on the CDC event that was last processed.
+
+
+[#recreate-db-restore]
+=== Recreate the database and restore backup
+
+You can recreate the database and import the aggregated backup with a single `CREATE DATABASE` call, using the backup as seed.
+
+[source,cypher,test-skip]
+----
+CREATE DATABASE neo4j
+OPTIONS {
+    txLogEnrichment: 'DIFF',  // <.>
+    seedURI: 'file:/var/lib/neo4j/backups/neo4j/',  // <.>
+}
+----
+
+<.> The new database should have the same name and xref:get-started/self-managed.adoc[transaction log enrichment mode] as the backupped database.
+<.> The combination of path and database name allows the server to pinpoint the right backup chain.
+You don't need to specify a filename but, if you do, ensure to provide the last differential backup. +
+File stored in remote cloud buckets can be accessed without further configuration, whereas `file`, `http(s?)`, and `ftp` require configuration.
+For more information, see link:https://neo4j.com/docs/operations-manual/current/database-administration/standard-databases/seed-from-uri/#neo4j-seed-providers[Seed providers in Neo4j].
+
+
+[#restart-cdc]
+=== Restart CDC application and query for changes
+
+Once the database is running again, you can xref:procedures/index.adoc#query[query for changes] from the event ID that your CDC application had processed before the database went offline.
+
+In the example, the last-processed change event has ID `EWcd7MhuWPmkAAAAAAAACM9\__________wAAAZZHsCvl`, so we query from there on.
+
+[source,cypher,test-skip]
+----
+CALL db.cdc.query('EWcd7MhuWPmkAAAAAAAACM9__________wAAAZZHsCvl') YIELD id, event, metadata
+RETURN id, event, metadata
+----
