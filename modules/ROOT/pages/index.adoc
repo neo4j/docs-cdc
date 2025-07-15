@@ -1,3 +1,4 @@
+:page-role: new-5.13 enterprise-edition aura-db-enterprise aura-db-business-critical
 ifndef::backend-pdf[]
 
 = Introduction
