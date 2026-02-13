@@ -1,5 +1,7 @@
 = Example CDC usage in Javascript
 
+See xref:examples/index.adoc#high-volume-change-processing[High-volume change processing] for throughput guidance when extending this example.
+
 [source, javascript, role="nocollapse"]
 ----
 const neo4j = require('neo4j-driver');

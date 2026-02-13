@@ -22,3 +22,31 @@ To avoid this, the code examples update the cursor to `db.cdc.current` if `db.cd
 Note that `db.cdc.current` needs to be called and stored before calling `db.cdc.query` for this to work.
 
 Another way to avoid this issue is to use broader selectors and perform client side filtering instead.
+
+[[high-volume-change-processing]]
+== High-volume change processing
+
+For high change rates, a single dedicated reader thread is usually sufficient for a CDC stream.
+The critical requirement is that this reader must not pause for downstream processing.
+
+Use a hand-off design:
+
+* One dedicated reader continuously consumes the CDC stream and immediately hands off each change to an in-memory queue.
+* A pool of worker threads consumes from the queue and performs processing in parallel.
+
+Avoid short polling patterns such as "fetch X events, stop, then reconnect".
+`db.cdc.query` streams continuously until the client catches up, and keeping a single stream open is typically the fastest approach.
+Repeatedly stopping and restarting the stream adds overhead and reduces throughput.
+
+The Neo4j driver buffers incoming changes in memory.
+If the reader does not hand off fast enough, that buffer can fill up and the server will stop sending additional changes until space is available.
+Similarly, if the application queue fills up, worker backpressure will block the reader and propagate the same slowdown.
+
+Plan capacity across the full pipeline:
+
+* Size worker concurrency so the queue is drained at least as fast as changes arrive.
+* Size queue depth to absorb short traffic spikes without blocking the reader.
+* Monitor queue depth, processing latency, and end-to-end lag.
+
+Runtime and language choice also affects throughput.
+For data-intensive workloads, higher-throughput runtimes (for example, Java) can often sustain higher processing rates than lower-throughput options (for example, Python), depending on workload characteristics and implementation details.

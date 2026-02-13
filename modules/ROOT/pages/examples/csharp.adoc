@@ -1,5 +1,7 @@
 = Example CDC usage in C#
 
+See xref:examples/index.adoc#high-volume-change-processing[High-volume change processing] for throughput guidance when extending this example.
+
 [source, csharp, role="nocollapse"]
 ----
 using System.CommandLine;
