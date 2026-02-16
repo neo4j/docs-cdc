@@ -45,8 +45,7 @@ Repeatedly stopping and restarting the stream adds overhead and reduces throughp
 The Neo4j driver buffers incoming changes in memory.
 If the reader does not hand off fast enough, that buffer can fill up and the server will stop sending additional changes until space is available.
 Similarly, if the application queue fills up, worker backpressure will block the reader and propagate the same slowdown.
-
-Plan capacity across the full pipeline:
+Therefore, plan capacity across the full pipeline:
 
 * Size worker concurrency so the queue is drained at least as fast as changes arrive.
 * Size queue depth to absorb short traffic spikes without blocking the reader.
