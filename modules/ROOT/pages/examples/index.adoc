@@ -23,11 +23,15 @@ Note that `db.cdc.current` needs to be called and stored before calling `db.cdc.
 
 Another way to avoid this issue is to use broader selectors and perform client side filtering instead.
 
-[[high-volume-change-processing]]
-== High-volume change processing
+[[monitoring-and-address-cdc-client-performance]]
+== Monitoring and addressing CDC client performance
+
+For optimal performance when the change rate is high, first monitor whether your CDC client is keeping up with Neo4j.
+Track lag by comparing the latest processed `txId` with the latest `txId` in Neo4j, and/or by monitoring `txCommitTime`.
+If lag keeps increasing, apply the recommendations below.
 
 For high change rates, a single dedicated reader thread is usually sufficient for a CDC stream.
-The critical requirement is that this reader must not pause for downstream processing.
+The critical requirement is that this reader does not pause for downstream processing.
 
 Use a hand-off design:
 
