@@ -6,7 +6,7 @@ The examples are provided separately for each of the supported link:https://neo4
 * xref:examples/csharp.adoc[C#]
 * xref:examples/go.adoc[Go]
 * xref:examples/java.adoc[Java]
-* xref:examples/js.adoc[Javascript]
+* xref:examples/js.adoc[JavaScript]
 * xref:examples/python.adoc[Python]
 
 

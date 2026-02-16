@@ -18,7 +18,7 @@ The recovery procedure works on Neo4j instances running version 2025.04 or later
 == Setup prerequisites
 
 - You have link:https://neo4j.com/docs/operations-manual/current/backup-restore/online-backup/#online-backup-example[incremental backups] of the failed database. For example, you could have a scheduled job that takes a backup every hour.
-- The xref:get-started/self-managed.adoc#log-retention[transaction log retention policy] is generous enough to accommodate the maximum amount of transactions your CDC application may be behind of.
+- The xref:get-started/self-managed.adoc#log-retention[transaction log retention policy] is generous enough to accommodate the maximum number of transactions your CDC application may be behind.
 - The database to restore was running with xref:get-started/self-managed.adoc[`txLogEnrichment`] set to either `FULL` or `DIFF`.
 - You keep track of the change event that your CDC application has processed last (specifically, the event ID and the transaction ID).
 
@@ -97,7 +97,7 @@ OPTIONS {
 }
 ----
 
-<.> The new database should have the same name and xref:get-started/self-managed.adoc[transaction log enrichment mode] as the backupped database.
+<.> The new database should have the same name and xref:get-started/self-managed.adoc[transaction log enrichment mode] as the backed-up database.
 <.> The combination of path and database name allows the server to pinpoint the right backup chain.
 You don't need to specify a filename but, if you do, ensure to provide the last differential backup. +
 File stored in remote cloud buckets can be accessed without further configuration, whereas `file`, `http(s?)`, and `ftp` require configuration.

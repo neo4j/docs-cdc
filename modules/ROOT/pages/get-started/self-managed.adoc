@@ -29,7 +29,7 @@ ALTER DATABASE <dbName> SET OPTION txLogEnrichment "DIFF"
 
 [IMPORTANT]
 ====
-Modifying CDC mode from `DIFF` to `FULL` or viceversa immediately changes the  xref:procedures/output-schema.adoc[structure of captured changes].
+Modifying CDC mode from `DIFF` to `FULL` or vice-versa immediately changes the xref:procedures/output-schema.adoc[structure of captured changes].
 Your CDC application must be able to deal with the change of format.
 ====
 
