@@ -45,7 +45,7 @@ The following steps outline how to mitigate this issue.
 . Ensure that the restored database has the same CDC mode value as your existing database.
 . Restart your CDC application, using xref:procedures/index.adoc#earliest[`db.cdc.earliest`] as the starting change identifier.
 . Enable writes to the restored database.
-. Verify that changes are consumed as by your CDC application.
+. Verify that changes are consumed by your CDC application.
 
 
 [[inconsistent-elementids]]

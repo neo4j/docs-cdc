@@ -1,5 +1,7 @@
 = Example CDC usage in Python
 
+See xref:examples/index.adoc#monitoring-and-address-cdc-client-performance[Monitoring and addressing CDC client performance] for throughput guidance when extending this example.
+
 [source, python, role="nocollapse"]
 ----
 import getopt
