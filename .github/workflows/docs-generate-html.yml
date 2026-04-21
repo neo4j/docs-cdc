@@ -9,8 +9,8 @@ permissions:
 on:
   push:
     branches:
-      - 'dev'
-      - '5.x'
+    - 'dev'
+    - '5.x'
   workflow_dispatch:
 
 # change `dev` and `main` according to your repository's branch names
