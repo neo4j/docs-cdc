@@ -23,15 +23,15 @@ urls:
 
 antora:
   extensions:
-  - "@neo4j-antora/roles-labels"
-  - "@neo4j-antora/table-footnotes"
-  - "@neo4j-antora/xref-hash-validator"
+    - "@neo4j-antora/roles-labels"
+    - "@neo4j-antora/table-footnotes"
+    - "@neo4j-antora/xref-hash-validator"
 
 asciidoc:
   extensions:
-  - "@neo4j-documentation/remote-include"
-  - "@neo4j-documentation/macros"
-  - "@neo4j-antora/mark-terms"
+    - "@neo4j-documentation/remote-include"
+    - "@neo4j-documentation/macros"
+    - "@neo4j-antora/mark-terms"
   attributes:
     # page-attributes are used by the ui-bundle and by extensions
     page-theme: docs
@@ -51,7 +51,7 @@ asciidoc:
     experimental: ''
     # update the copyright value with the first commit in a new year
     copyright: 2026
-    # icon attributes 
+    # icon attributes
     check-mark: icon:check[]
     cross-mark: icon:times[]
     # neo4j.com attributes. Always use when linking to neo4j.com URLs
