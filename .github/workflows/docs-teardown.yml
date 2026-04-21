@@ -8,8 +8,8 @@ permissions:
 on:
   pull_request_target:
     branches:
-      - 'dev'
-      - '5.x'
+      - dev
+      - 5.x
     types:
       - closed
 
@@ -50,4 +50,4 @@ jobs:
 
             The preview documentation has now been torn down - reopening this PR will republish it.
           GITHUB_TOKEN: ${{ secrets.DOCS_PR_COMMENT_TOKEN }}
-      
+
