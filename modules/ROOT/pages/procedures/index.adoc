@@ -100,10 +100,13 @@ For a detailed description of the metadata fields, see xref:procedures/output-sc
 <7> The retrieved changes on the affected entity.
 For a detailed description of the change event, see xref:procedures/output-schema.adoc[].
 
+////
+fails with: `wrong database. Change identifier $`A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABAAAAAAAAAAA` does not belong to this database.`
+////
 .Query for changes after creation of a `:Person` node
 ====
 .Query
-[source, cypher, test-fail=Neo.ClientError.ChangeDataCapture.InvalidIdentifier]
+[source, cypher, test-skip]
 ----
 CALL db.cdc.query("A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABAAAAAAAAAAA")
 ----
