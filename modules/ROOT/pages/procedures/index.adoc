@@ -221,7 +221,7 @@ CREATE (:Person:Hero {name: 'Batman', color: 'black'})
 fails with: `wrong database. Change identifier $`A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABAAAAAAAAAAA` does not belong to this database.`
 ////
 .Transaction 3 -- Retrieve change event for `Person` node creation
-[source, cypher]
+[source, cypher, test-skip]
 ----
 WITH 'BaQswf9NV0b7qicwDdh7vfwAAAAAAAAD83__________AAABjzfm4bM=' AS previousId
 CALL db.cdc.query(previousId) YIELD event, metadata RETURN event, metadata
