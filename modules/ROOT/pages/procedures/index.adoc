@@ -40,7 +40,7 @@ CALL db.cdc.earliest()
 [[current]]
 == Retrieve the current change identifier
 
-The procedure `db.cdc.current` returns the change identifier for the last committed transaction. 
+The procedure `db.cdc.current` returns the change identifier for the last committed transaction.
 From Neo4j 2026.06 when using Cypher 25, the `txCommitTime` field is also returned, representing the timestamp of the last committed transaction.
 
 Note that **the returned identifier is exclusive**: it does not include the changes that happened in the transaction it points to.

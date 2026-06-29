@@ -9,7 +9,7 @@ include::partial$get-started.adoc[tags=intro]
 
 === Create a database with CDC enabled
 
-To create a new database with CDC enabled, use the link:https://www.neo4j.com/docs/operations-manual/current/database-administration/standard-databases/manage-databases/#manage-databases-create[`CREATE DATABASE`] Cypher command and set the option `txLogEnrichment` to either `FULL` or `DIFF`.
+To create a new database with CDC enabled, use the link:https://www.neo4j.com/docs/operations-manual/current/database-administration/standard-databases/create-databases/[`CREATE DATABASE`] Cypher command and set the option `txLogEnrichment` to either `FULL` or `DIFF`.
 
 .Query
 [source, cypher]
@@ -19,7 +19,7 @@ CREATE DATABASE <dbName> IF NOT EXISTS OPTIONS {txLogEnrichment: "FULL"}
 
 === Modify a database's CDC mode
 
-To tweak the CDC mode on an existing database, use the https://www.neo4j.com/docs/operations-manual/current/database-administration/standard-databases/manage-databases/#administration-databases-alter-database[`ALTER DATABASE`] Cypher command and set the option `txLogEnrichment` to either `FULL` or `DIFF`.
+To tweak the CDC mode on an existing database, use the https://www.neo4j.com/docs/operations-manual/current/database-administration/standard-databases/alter-databases/[`ALTER DATABASE`] Cypher command and set the option `txLogEnrichment` to either `FULL` or `DIFF`.
 
 .Query
 [source, cypher]
@@ -36,7 +36,7 @@ Your CDC application must be able to deal with the change of format.
 [[get-cdc-mode]]
 === Get a database's CDC mode
 
-To see what value the CDC mode of a database is, use the link:https://neo4j.com/docs/operations-manual/current/database-administration/standard-databases/manage-databases/#manage-databases-list[`SHOW DATABASES`] Cypher command.
+To see what value the CDC mode of a database is, use the link:https://neo4j.com/docs/operations-manual/current/database-administration/standard-databases/listing-databases/[`SHOW DATABASES`] Cypher command.
 
 .Query
 [source, cypher]
@@ -111,7 +111,7 @@ Actual disk usage depends on the application, data model and transaction charact
 Since CDC information is stored in transaction log entries, the retention period of these logs determines how far back in time your application can query for CDC data..
 As a general rule of thumb, you can pick a period greater or equal to the downtime tolerance of your downstream application, so that the changes don't get pruned before the application has had time to process them.
 
-You can control the transaction log retention period through the configuration setting `db.tx_log.rotation.retention_policy`. For more details on transaction log files and how to configure them, see link:{neo4j-docs-base-uri}/operations-manual/{page-version}/configuration/transaction-logs/[Transaction logging].
+You can control the transaction log retention period through the configuration setting `db.tx_log.rotation.retention_policy`. For more details on transaction log files and how to configure them, see link:https://neo4j.com/docs/operations-manual/current/database-internals/transaction-logs/[Transaction logging].
 
 [TIP]
 Transaction logs are used not only by CDC, but also by differential backups and cluster operations.
@@ -141,4 +141,4 @@ In case large transactions resulted in log files larger than 256MB, the minimum 
 === Unrecorded changes
 
 CDC can only capture data changes that pass through the transaction layer and any data creation that avoids this layer can therefore not be captured.
-For example, when importing data with the link:{neo4j-docs-base-uri}/operations-manual/current/tools/neo4j-admin/neo4j-admin-import/[`neo4j-admin database import`] tool, whether full or incremental, or when loading data with the link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/restore-dump/[`neo4j-admin database load`] tool, data is written directly to the store without sending anything to the transaction log, so such changes are **not** captured by CDC.
+For example, when importing data with the link:https://neo4j.com/docs/operations-manual/current/import/[`neo4j-admin database import`] tool, whether full or incremental, or when loading data with the link:{neo4j-docs-base-uri}/operations-manual/current/backup-restore/restore-dump/[`neo4j-admin database load`] tool, data is written directly to the store without sending anything to the transaction log, so such changes are **not** captured by CDC.
