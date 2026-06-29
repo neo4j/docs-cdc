@@ -2,7 +2,7 @@
 
 Neo4j internally identifies nodes and relationships by their link:https://neo4j.com/docs/cypher-manual/current/functions/scalar/#functions-elementid[elementId].
 Although these internal identifiers are always part of the generated change events, they are not safe to track data out of the scope of a single transaction.
-You should thus define logical/business keys to your graph entities in the form of  link:https://neo4j.com/docs/cypher-manual/current/constraints/examples/#constraints-examples-node-key[_node key constraints_] and link:https://neo4j.com/docs/cypher-manual/current/constraints/examples/#constraints-examples-relationship-key[_relationships key constraints_].
+You should thus define logical/business keys to your graph entities in the form of link:https://neo4j.com/docs/cypher-manual/current/schema/constraints/create-constraints/#create-key-constraints[node and relationship _key constraints_].
 Properties with node and relationship key constraints are always included in change events as top-level objects.
 
 If _key_ constraints are defined on graph entities, all of the participating property values are captured as `event.keys` field on node changes and relationship changes.
