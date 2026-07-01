@@ -28,7 +28,7 @@ CALL db.cdc.earliest()
 ----
 
 .Result
-[role="queryresult",options="header,footer",cols="1*<m"]
+[role="queryresult",options="header",cols="1*<m"]
 |===
 | +id+
 | +"A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABQAAAAAAAAAA"+
@@ -54,7 +54,7 @@ CALL db.cdc.current()
 ----
 
 .Result
-[role="queryresult",options="header,footer",cols="1m,1m"]
+[role="queryresult",options="header",cols="1m,1m"]
 |===
 | +id+ | +txCommitTime+
 | +"A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABQAAAAAAAAAA"+
@@ -112,7 +112,7 @@ CALL db.cdc.query("A3V16ZaLlUmnipHLFkWrlA0AAAAAAAAABAAAAAAAAAAA")
 ----
 
 .Result
-[role="queryresult",options="header,footer",cols="3m,1m,1m,5a,5a"]
+[role="queryresult",options="header",cols="3m,1m,1m,5a,5a"]
 |===
 | id | txId | seq | metadata | event
 
@@ -228,7 +228,7 @@ CALL db.cdc.query(previousId) YIELD event, metadata RETURN event, metadata
 ----
 
 .Result
-[role="queryresult",options="header,footer",cols="a,a"]
+[role="queryresult",options="header",cols="a,a"]
 |===
 | event | metadata
 
