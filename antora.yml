@@ -7,6 +7,8 @@ nav:
 
 asciidoc:
   attributes:
+    page-tabs: drivers-apis@
+    page-tabs-index: 90
     theme: docs
     copyright: Neo4j Inc.
     page-pagination: true
