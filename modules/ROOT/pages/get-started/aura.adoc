@@ -3,6 +3,11 @@
 
 include::partial$get-started.adoc[tags=intro]
 
+[NOTE]
+====
+CDC is not available for Aura instances with multiple user databases.
+====
+
 
 [[toggle-cdc-mode]]
 == Enable/Toggle CDC mode
